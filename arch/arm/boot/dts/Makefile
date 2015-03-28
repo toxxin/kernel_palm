@@ -251,6 +251,7 @@ dtb-$(CONFIG_ARCH_OMAP2) += omap2420-h4.dtb \
 	omap2430-sdp.dtb
 dtb-$(CONFIG_ARCH_OMAP3) += am3517-craneboard.dtb \
 	am3517-evm.dtb \
+	nmv.dtb \
 	am3517_mt_ventoux.dtb \
 	omap3430-sdp.dtb \
 	omap3-beagle.dtb \
