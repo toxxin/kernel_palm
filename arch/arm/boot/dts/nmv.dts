@@ -22,6 +22,31 @@
 		reg = <0x80000000 0x10000000>; /* 256 MB */
 	};
 
+	matrix_keypad: matrix-keypad@0 {
+		compatible = "gpio-matrix-keypad";
+		debounce-delay-ms = <50>;
+		col-scan-delay-us = <200>;
+
+		col-gpios = <
+			&gpio6 16 0
+			&gpio6 18 0>;
+
+		row-gpios = <
+			&gpio6 17 0
+			&gpio4 23 0
+			&gpio6 22 0>;
+
+		linux,keymap = <
+			0x0000004b /* row 0, col 0, KEY_LEFT */
+			0x00010048 /* row 0, col 1, KEY_UP */
+			0x0100004d /* row 1, col 0, KEY_RIGHT */
+			0x01010050 /* row 1, col 1, KEY_DOWN */
+			0x0200000e /* row 2, col 0, KEY_BACK */
+			0x0201001c /* row 2, col 1, KEY_OK */
+		>;
+		gpio-activelow;
+	};
+
 	vbat: fixedregulator@0 {
 		compatible = "regulator-fixed";
 		regulator-name = "vbat";
@@ -73,6 +98,11 @@
 #include "tps65910.dtsi"
 
 &omap3_pmx_core {
+	pinctrl-names = "default";
+	pinctrl-0 = <
+		&matrix_pins
+	>;
+
 	mmc1_pins: pinmux_mmc1_pins {
 		pinctrl-single,pins = <
 			0x114 (PIN_OUTPUT_PULLUP | MUX_MODE0)  /* sdmmc1_clk.sdmmc1_clk */
@@ -86,6 +116,16 @@
 			0x124 (PIN_INPUT | MUX_MODE0)  /* sdmmc1_dat6.sdmmc1_dat6 */
 			0x126 (PIN_INPUT | MUX_MODE0)  /* sdmmc1_dat7.sdmmc1_dat7 */
 		 >;
+	};
+
+	matrix_pins: pinmux_matrix_pins {
+		pinctrl-single,pins = <
+			0x1a2 (PIN_OUTPUT_PULLUP | MUX_MODE4)	/* col1 - gpio_176 */
+			0x1a6 (PIN_OUTPUT_PULLUP | MUX_MODE4)	/* col2 - gpio_178 */
+			0x1a4 (PIN_INPUT | MUX_MODE4)		/* row1 - gpio_177 */
+			0x112 (PIN_INPUT | MUX_MODE4)		/* row2 - gpio_119 */
+	/*		0x1ae (PIN_INPUT | MUX_MODE4)*/		/* row3 - gpio_182 */
+		>;
 	};
 
 	tps_pins: pinmux_tps_pins {
