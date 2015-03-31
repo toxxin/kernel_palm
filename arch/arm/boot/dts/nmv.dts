@@ -126,9 +126,14 @@
 		 * Unused:
 		 * VDIG1=2.7V,300mA max
 		 * VDIG2=1.8V,300mA max
-		 * VAUX1=???
-		 * VAUX2=???
 		 */
+
+		vaux1_reg: regulator@9 {
+			/* VDDS_SRAM_1V8 */
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+			regulator-always-on;
+		};
 
 		vpll_reg: regulator@7 {
 			/* VDDS_DPLL_1V8 */
