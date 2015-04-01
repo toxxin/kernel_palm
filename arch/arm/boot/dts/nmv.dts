@@ -22,6 +22,80 @@
 		reg = <0x80000000 0x10000000>; /* 256 MB */
 	};
 
+	leds {
+		compatible = "gpio-leds";
+
+		led1 {
+			label = "g_left";
+			gpios = <&gpio1 27 GPIO_ACTIVE_HIGH>; /* kb_gled4 - gpio_27 */
+		};
+
+		led2 {
+			label = "g_enter";
+			gpios = <&gpio1 29 GPIO_ACTIVE_HIGH>; /* kb_gled6 - gpio_29 */
+		};
+
+		led3 {
+			label = "g_up";
+			gpios = <&gpio4 9 GPIO_ACTIVE_HIGH>; /* kb_gled5 - gpio_105 */
+		};
+
+		led4 {
+			label = "g_back";
+			gpios = <&gpio4 1 GPIO_ACTIVE_HIGH>; /* kb_gled1 - gpio_97 */
+		};
+
+		led5 {
+			label = "g_right";
+			gpios = <&gpio5 21 GPIO_ACTIVE_HIGH>; /* kb_gled3 - gpio_149 */
+		};
+
+		led6 {
+			label = "g_down";
+			gpios = <&gpio6 21 GPIO_ACTIVE_HIGH>; /* kb_gled7 - gpio_181 */
+		};
+
+		led7 {
+			label = "g_power";
+			gpios = <&gpio5 28 GPIO_ACTIVE_HIGH>; /* kb_gled2 - gpio_156 */
+		};
+
+		led8 {
+			label = "r_left";
+			gpios = <&gpio1 26 GPIO_ACTIVE_HIGH>; /* kb_rled2 - gpio_26 */
+		};
+
+		led9 {
+			label = "r_enter";
+			gpios = <&gpio4 21 GPIO_ACTIVE_HIGH>; /* kb_rled3 - gpio_117 */
+		};
+
+		led10 {
+			label = "r_up";
+			gpios = <&gpio4 8 GPIO_ACTIVE_HIGH>; /* kb_rled5 - gpio_104 */
+		};
+
+		led11 {
+			label = "r_back";
+			gpios = <&gpio5 2 GPIO_ACTIVE_HIGH>; /* kb_rled7 - gpio_130 */
+		};
+
+		led12 {
+			label = "r_right";
+			gpios = <&gpio5 30 GPIO_ACTIVE_HIGH>; /* kb_rled6 - gpio_158 */
+		};
+
+		led13 {
+			label = "r_down";
+			gpios = <&gpio6 20 GPIO_ACTIVE_HIGH>; /* kb_rled4 - gpio_180 */
+		};
+
+		led14 {
+			label = "r_power";
+			gpios = <&gpio5 31 GPIO_ACTIVE_HIGH>; /* kb_rled1 - gpio_159 */
+		};
+	};
+
 	matrix_keypad: matrix-keypad@0 {
 		compatible = "gpio-matrix-keypad";
 		debounce-delay-ms = <50>;
@@ -100,7 +174,7 @@
 &omap3_pmx_core {
 	pinctrl-names = "default";
 	pinctrl-0 = <
-		&matrix_pins
+		&led_pins &matrix_pins
 	>;
 
 	mmc1_pins: pinmux_mmc1_pins {
@@ -116,6 +190,26 @@
 			0x124 (PIN_INPUT | MUX_MODE0)  /* sdmmc1_dat6.sdmmc1_dat6 */
 			0x126 (PIN_INPUT | MUX_MODE0)  /* sdmmc1_dat7.sdmmc1_dat7 */
 		 >;
+	};
+
+	led_pins: pinmux_led_pins {
+		pinctrl-single,pins = <
+			0x1ba (PIN_OUTPUT | MUX_MODE4) /* ccdc_vd.gpio_97	*/
+			0x15c (PIN_OUTPUT | MUX_MODE4) /* mcbspi1_clkr.gpio_156	*/
+			0x14e (PIN_OUTPUT | MUX_MODE4) /* uart1_rts.gpio_149	*/
+			0x5f6 (PIN_OUTPUT | MUX_MODE4) /* etk_d13.gpio_27	*/
+			0x1ca (PIN_OUTPUT | MUX_MODE4) /* ccdc_data6.gpio_105	*/
+			0x5fa (PIN_OUTPUT | MUX_MODE4) /* etk_d15.gpio_29	*/
+			0x1ac (PIN_OUTPUT | MUX_MODE4) /* mcspi2_cs0.gpio_181	*/
+
+			0x162 (PIN_OUTPUT | MUX_MODE4) /* mcbsp1_dr.gpio_159	*/
+			0x5f4 (PIN_OUTPUT | MUX_MODE4) /* etk_d12.gpio_26	*/
+			0x10e (PIN_OUTPUT | MUX_MODE4) /* mcbsp2_clkx.gpio_117	*/
+			0x1aa (PIN_OUTPUT | MUX_MODE4) /* mcspi2_somi.gpio_180	*/
+			0x1c8 (PIN_OUTPUT | MUX_MODE4) /* ccdc_data5.gpio_104	*/
+			0x160 (PIN_OUTPUT | MUX_MODE4) /* mcbsp1_dx.gpio_158	*/
+			0x1e4 (PIN_OUTPUT | MUX_MODE4) /* hecc1_txd.gpio_130	*/
+		>;
 	};
 
 	matrix_pins: pinmux_matrix_pins {
