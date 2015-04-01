@@ -28,13 +28,13 @@
 		col-scan-delay-us = <200>;
 
 		col-gpios = <
-			&gpio6 16 0
-			&gpio6 18 0>;
+			&gpio6 16 0	/* gpio176 */
+			&gpio6 18 0>;	/* gpio178 */
 
 		row-gpios = <
-			&gpio6 17 0
-			&gpio4 23 0
-			&gpio6 22 0>;
+			&gpio6 17 0	/* gpio177 */
+			&gpio4 23 0	/* gpio119 */
+			&gpio6 22 0>;	/* gpio182 */
 
 		linux,keymap = <
 			0x0000004b /* row 0, col 0, KEY_LEFT */
@@ -124,7 +124,7 @@
 			0x1a6 (PIN_OUTPUT_PULLUP | MUX_MODE4)	/* col2 - gpio_178 */
 			0x1a4 (PIN_INPUT | MUX_MODE4)		/* row1 - gpio_177 */
 			0x112 (PIN_INPUT | MUX_MODE4)		/* row2 - gpio_119 */
-	/*		0x1ae (PIN_INPUT | MUX_MODE4)*/		/* row3 - gpio_182 */
+			0x1ae (PIN_INPUT | MUX_MODE4)		/* row3 - gpio_182 */
 		>;
 	};
 
