@@ -27,72 +27,86 @@
 
 		led1 {
 			label = "g_left";
-			gpios = <&gpio1 27 GPIO_ACTIVE_HIGH>; /* kb_gled4 - gpio_27 */
+			gpios = <&gpio1 27 GPIO_ACTIVE_LOW>; /* kb_gled4 - gpio_27 */
+			default-state = "off";
 		};
 
 		led2 {
 			label = "g_enter";
-			gpios = <&gpio1 29 GPIO_ACTIVE_HIGH>; /* kb_gled6 - gpio_29 */
+			gpios = <&gpio1 29 GPIO_ACTIVE_LOW>; /* kb_gled6 - gpio_29 */
+			default-state = "off";
 		};
 
 		led3 {
 			label = "g_up";
-			gpios = <&gpio4 9 GPIO_ACTIVE_HIGH>; /* kb_gled5 - gpio_105 */
+			gpios = <&gpio4 9 GPIO_ACTIVE_LOW>; /* kb_gled5 - gpio_105 */
+			default-state = "off";
 		};
 
 		led4 {
 			label = "g_back";
-			gpios = <&gpio4 1 GPIO_ACTIVE_HIGH>; /* kb_gled1 - gpio_97 */
+			gpios = <&gpio4 1 GPIO_ACTIVE_LOW>; /* kb_gled1 - gpio_97 */
+			default-state = "off";
 		};
 
 		led5 {
 			label = "g_right";
-			gpios = <&gpio5 21 GPIO_ACTIVE_HIGH>; /* kb_gled3 - gpio_149 */
+			gpios = <&gpio5 21 GPIO_ACTIVE_LOW>; /* kb_gled3 - gpio_149 */
+			default-state = "off";
 		};
 
 		led6 {
 			label = "g_down";
-			gpios = <&gpio6 21 GPIO_ACTIVE_HIGH>; /* kb_gled7 - gpio_181 */
+			gpios = <&gpio6 21 GPIO_ACTIVE_LOW>; /* kb_gled7 - gpio_181 */
+			default-state = "off";
 		};
 
 		led7 {
 			label = "g_power";
-			gpios = <&gpio5 28 GPIO_ACTIVE_HIGH>; /* kb_gled2 - gpio_156 */
+			gpios = <&gpio5 28 GPIO_ACTIVE_LOW>; /* kb_gled2 - gpio_156 */
+			default-state = "off";
 		};
 
 		led8 {
 			label = "r_left";
-			gpios = <&gpio1 26 GPIO_ACTIVE_HIGH>; /* kb_rled2 - gpio_26 */
+			gpios = <&gpio1 26 GPIO_ACTIVE_LOW>; /* kb_rled2 - gpio_26 */
+			default-state = "off";
 		};
 
 		led9 {
 			label = "r_enter";
-			gpios = <&gpio4 21 GPIO_ACTIVE_HIGH>; /* kb_rled3 - gpio_117 */
+			gpios = <&gpio4 21 GPIO_ACTIVE_LOW>; /* kb_rled3 - gpio_117 */
+			default-state = "off";
 		};
 
 		led10 {
 			label = "r_up";
-			gpios = <&gpio4 8 GPIO_ACTIVE_HIGH>; /* kb_rled5 - gpio_104 */
+			gpios = <&gpio4 8 GPIO_ACTIVE_LOW>; /* kb_rled5 - gpio_104 */
+			default-state = "off";
 		};
 
 		led11 {
 			label = "r_back";
-			gpios = <&gpio5 2 GPIO_ACTIVE_HIGH>; /* kb_rled7 - gpio_130 */
+			gpios = <&gpio5 2 GPIO_ACTIVE_LOW>; /* kb_rled7 - gpio_130 */
+			default-state = "off";
 		};
 
 		led12 {
 			label = "r_right";
-			gpios = <&gpio5 30 GPIO_ACTIVE_HIGH>; /* kb_rled6 - gpio_158 */
+			gpios = <&gpio5 30 GPIO_ACTIVE_LOW>; /* kb_rled6 - gpio_158 */
+			default-state = "off";
 		};
 
 		led13 {
 			label = "r_down";
-			gpios = <&gpio6 20 GPIO_ACTIVE_HIGH>; /* kb_rled4 - gpio_180 */
+			gpios = <&gpio6 20 GPIO_ACTIVE_LOW>; /* kb_rled4 - gpio_180 */
+			default-state = "off";
 		};
 
 		led14 {
 			label = "r_power";
-			gpios = <&gpio5 31 GPIO_ACTIVE_HIGH>; /* kb_rled1 - gpio_159 */
+			gpios = <&gpio5 31 GPIO_ACTIVE_LOW>; /* kb_rled1 - gpio_159 */
+			default-state = "off";
 		};
 	};
 
