@@ -135,9 +135,9 @@
 		gpio-activelow;
 	};
 
-	vbat: fixedregulator@0 {
+	vsys: fixedregulator@0 {
 		compatible = "regulator-fixed";
-		regulator-name = "vbat";
+		regulator-name = "vsys";
 		regulator-min-microvolt = <5000000>;
 		regulator-max-microvolt = <5000000>;
 		regulator-boot-on;
@@ -145,7 +145,7 @@
 
 	vlcd: fixedregulator@1 {
 		compatible = "regulator-fixed";
-		vin-supply = <&vbat>;
+		vin-supply = <&vsys>;
 		regulator-name = "vlcd";
 		regulator-min-microvolt = <4700000>;
 		regulator-max-microvolt = <4700000>;
@@ -156,7 +156,7 @@
 
 	vusb: fixedregulator@2 {
 		compatible = "regulator-fixed";
-		vin-supply = <&vbat>;
+		vin-supply = <&vsys>;
 		regulator-name = "vusb";
 		regulator-min-microvolt = <5000000>;
 		regulator-max-microvolt = <5000000>;
@@ -273,14 +273,14 @@
 
 	ti,en-ck32k-xtal;
 
-	vcc1-supply = <&vbat>;
-	vcc2-supply = <&vbat>;
-	vcc3-supply = <&vbat>;
-	vcc4-supply = <&vbat>;
-	vcc5-supply = <&vbat>;
-	vcc6-supply = <&vbat>;
-	vcc7-supply = <&vbat>;
-	vccio-supply = <&vbat>;
+	vcc1-supply = <&vsys>;
+	vcc2-supply = <&vsys>;
+	vcc3-supply = <&vsys>;
+	vcc4-supply = <&vsys>;
+	vcc5-supply = <&vsys>;
+	vcc6-supply = <&vsys>;
+	vcc7-supply = <&vsys>;
+	vccio-supply = <&vsys>;
 
 	regulators {
 		vrtc_reg: regulator@0 {
