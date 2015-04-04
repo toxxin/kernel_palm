@@ -142,6 +142,17 @@
 		regulator-max-microvolt = <5000000>;
 		regulator-boot-on;
 	};
+
+	vlcd: fixedregulator@1 {
+		compatible = "regulator-fixed";
+		vin-supply = <&vbat>;
+		regulator-name = "vlcd";
+		regulator-min-microvolt = <4700000>;
+		regulator-max-microvolt = <4700000>;
+		regulator-boot-on;
+		gpio = <&gpio3 0 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+	};
 };
 
 &davinci_emac {
