@@ -153,6 +153,16 @@
 		gpio = <&gpio3 0 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 	};
+
+	vusb: fixedregulator@2 {
+		compatible = "regulator-fixed";
+		vin-supply = <&vbat>;
+		regulator-name = "vusb";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		gpio = <&gpio6 19 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+	};
 };
 
 &davinci_emac {
