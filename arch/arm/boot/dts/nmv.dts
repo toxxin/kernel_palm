@@ -196,6 +196,16 @@
 	};
 };
 
+&uart1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pins>;
+};
+
+&uart2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2_pins>;
+};
+
 &davinci_emac {
 	     status = "okay";
 };
@@ -274,6 +284,22 @@
 		pinctrl-single,pins = <
 			0x0a0 (PIN_OUTPUT_PULLUP | MUX_MODE4)  /* gpmc_wait2.gpio_64 */
 			OMAP3_CORE1_IOPAD(0x21ec, PIN_OUTPUT | MUX_MODE4)       /* ccdc_wen.gpio_98 */
+		>;
+	};
+
+	uart1_pins: pinmux_uart1_pins {
+		pinctrl-single,pins = <
+			0x152 (PIN_INPUT | MUX_MODE0)	/* uart1_rx.uart1_rx */
+			0x14c (PIN_OUTPUT |MUX_MODE0)	/* uart1_tx.uart1_tx */
+		>;
+	};
+
+	uart2_pins: pinmux_uart2_pins {
+		pinctrl-single,pins = <
+			0x14a (PIN_INPUT | MUX_MODE0)	/* uart2_rx.uart2_rx */
+			0x148 (PIN_OUTPUT | MUX_MODE0)	/* uart2_tx.uart2_tx */
+			0x144 (PIN_INPUT | MUX_MODE0)	/* uart2_cts.uart2_cts */
+			0x146 (PIN_OUTPUT | MUX_MODE0)	/* uart2_rts.uart2_rts */
 		>;
 	};
 
