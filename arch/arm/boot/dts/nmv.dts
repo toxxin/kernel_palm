@@ -135,6 +135,37 @@
 		gpio-activelow;
 	};
 
+	lcd: display@0 {
+		compatible = "panel-dpi";
+		label = "lcd";
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&lcd_pins>;
+
+		port {
+			lcd_in: endpoint {
+				remote-endpoint = <&dpi_out>;
+			};
+		};
+
+		panel-timing {
+			clock-frequency = <24284>;  /* 12000 */
+			hactive = <480>;
+			vactive = <800>;
+			hfront-porch = <8>;
+			hback-porch = <8>;
+			hsync-len = <1>;
+			vback-porch = <8>;
+			vfront-porch = <8>;
+			vsync-len = <1>;
+
+			hsync-active = <0>;
+			vsync-active = <0>;
+			de-active = <0>;
+			pixelclk-active = <1>;
+		};
+	};
+
 	vsys: fixedregulator@0 {
 		compatible = "regulator-fixed";
 		regulator-name = "vsys";
@@ -204,7 +235,20 @@
       status = "disabled";
 };
 
-dss {
+&mcspi1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi1_pins>;
+	status = "okay";
+
+	backlight: backlight@0 {
+		compatible = "samsung,ams369fg06-backlight";
+		spi-max-frequency = <100000>;
+		reg = <0>;
+		gpio-rst = <&gpio4 2 GPIO_ACTIVE_LOW>; 	/* gpio_98 */
+	};
+};
+
+&dss {
 	status = "okay";
 
 	pinctrl-names = "default";
@@ -223,8 +267,15 @@ dss {
 &omap3_pmx_core {
 	pinctrl-names = "default";
 	pinctrl-0 = <
-		&led_pins &matrix_pins
+		&ctrl_pins &led_pins &matrix_pins
 	>;
+
+	ctrl_pins: pinmux_ctrl_pins {
+		pinctrl-single,pins = <
+			0x0a0 (PIN_OUTPUT_PULLUP | MUX_MODE4)  /* gpmc_wait2.gpio_64 */
+			OMAP3_CORE1_IOPAD(0x21ec, PIN_OUTPUT | MUX_MODE4)       /* ccdc_wen.gpio_98 */
+		>;
+	};
 
 	mmc1_pins: pinmux_mmc1_pins {
 		pinctrl-single,pins = <
@@ -271,6 +322,21 @@ dss {
 			OMAP3_CORE1_IOPAD(0x2106, PIN_OUTPUT | MUX_MODE0)       /* dss_data21.dss_data21 */
 			OMAP3_CORE1_IOPAD(0x2108, PIN_OUTPUT | MUX_MODE0)       /* dss_data22.dss_data22 */
 			OMAP3_CORE1_IOPAD(0x210a, PIN_OUTPUT | MUX_MODE0)       /* dss_data23.dss_data23 */
+		>;
+	};
+
+	lcd_pins: pinmux_lcd_pins {
+		pinctrl-single,pins = <
+			0x0a2(PIN_OUTPUT | MUX_MODE4)       /* gpmc_wait3.gpio_65 */
+		>;
+	};
+
+	spi1_pins: pinmux_spi1_pins {
+		pinctrl-single,pins = <
+			OMAP3_CORE1_IOPAD(0x21c8, PIN_INPUT | MUX_MODE0)   /* mcspi1_clk.mcspi1_clk */
+			OMAP3_CORE1_IOPAD(0x21ca, PIN_INPUT | MUX_MODE0)   /* mcspi1_simo.mcspi1_simo */
+			OMAP3_CORE1_IOPAD(0x21cc, PIN_INPUT | MUX_MODE0)   /* mcspi1_somi.mcspi1_somi */
+			OMAP3_CORE1_IOPAD(0x21ce, PIN_INPUT_PULLDOWN | MUX_MODE0)   /* mcspi1_cs0.mcspi1_cs0 */
 		>;
 	};
 
