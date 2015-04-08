@@ -8,6 +8,7 @@
 /dts-v1/;
 
 #include "am3517.dtsi"
+#include "omap34xx.dtsi"
 
 / {
 	model = "TI AM3517 NMV";
@@ -286,7 +287,7 @@
 &omap3_pmx_core {
 	pinctrl-names = "default";
 	pinctrl-0 = <
-		&ctrl_pins &led_pins &matrix_pins
+		&ctrl_pins &led_1_pins &matrix_pins
 	>;
 
 	ctrl_pins: pinmux_ctrl_pins {
@@ -396,18 +397,15 @@
 		>;
 	};
 
-	led_pins: pinmux_led_pins {
+	led_1_pins: pinmux_led_1_pins {
 		pinctrl-single,pins = <
 			0x1ba (PIN_OUTPUT | MUX_MODE4) /* ccdc_vd.gpio_97	*/
 			0x15c (PIN_OUTPUT | MUX_MODE4) /* mcbspi1_clkr.gpio_156	*/
 			0x14e (PIN_OUTPUT | MUX_MODE4) /* uart1_rts.gpio_149	*/
-			0x5f6 (PIN_OUTPUT | MUX_MODE4) /* etk_d13.gpio_27	*/
 			0x1ca (PIN_OUTPUT | MUX_MODE4) /* ccdc_data6.gpio_105	*/
-			0x5fa (PIN_OUTPUT | MUX_MODE4) /* etk_d15.gpio_29	*/
 			0x1ac (PIN_OUTPUT | MUX_MODE4) /* mcspi2_cs0.gpio_181	*/
 
 			0x162 (PIN_OUTPUT | MUX_MODE4) /* mcbsp1_dr.gpio_159	*/
-			0x5f4 (PIN_OUTPUT | MUX_MODE4) /* etk_d12.gpio_26	*/
 			0x10e (PIN_OUTPUT | MUX_MODE4) /* mcbsp2_clkx.gpio_117	*/
 			0x1aa (PIN_OUTPUT | MUX_MODE4) /* mcspi2_somi.gpio_180	*/
 			0x1c8 (PIN_OUTPUT | MUX_MODE4) /* ccdc_data5.gpio_104	*/
@@ -429,6 +427,21 @@
 	tps_pins: pinmux_tps_pins {
 		pinctrl-single,pins = <
 			0x1b0 (PIN_INPUT_PULLUP | MUX_MODE0) /* sys_nirq.sys_nirq */
+		>;
+	};
+};
+
+&omap3_pmx_core2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <
+		&led_2_pins
+	>;
+
+	led_2_pins: pinmux_led_2_pins {
+		pinctrl-single,pins = <
+			OMAP3430_CORE2_IOPAD(0x25f6, PIN_OUTPUT | MUX_MODE4) /* etk_d13.gpio_27 */
+			OMAP3430_CORE2_IOPAD(0x25fa, PIN_OUTPUT | MUX_MODE4) /* etk_d15.gpio_29 */
+			OMAP3430_CORE2_IOPAD(0x25f4, PIN_OUTPUT | MUX_MODE4) /* etk_d12.gpio_26 */
 		>;
 	};
 };
