@@ -167,6 +167,12 @@
 		};
 	};
 
+	hsusb1_phy: hsusb1_phy {
+		compatible = "usb-nop-xceiv";
+		reset-gpios = <&gpio5 22 GPIO_ACTIVE_LOW>;     /* gpio_150 */
+		vcc-supply = <&vusb>;
+	};
+
 	vsys: fixedregulator@0 {
 		compatible = "regulator-fixed";
 		regulator-name = "vsys";
@@ -268,6 +274,10 @@
 	};
 };
 
+&usbhsehci {
+	phys = <&hsusb1_phy>;
+};
+
 &dss {
 	status = "okay";
 
@@ -292,8 +302,14 @@
 
 	ctrl_pins: pinmux_ctrl_pins {
 		pinctrl-single,pins = <
-			0x0a0 (PIN_OUTPUT_PULLUP | MUX_MODE4)  /* gpmc_wait2.gpio_64 */
-			OMAP3_CORE1_IOPAD(0x21ec, PIN_OUTPUT | MUX_MODE4)       /* ccdc_wen.gpio_98 */
+			/* vlcd_en */
+			0x0a0 (PIN_OUTPUT_PULLUP | MUX_MODE4)	/* gpmc_wait2.gpio_64 */
+			/* lcd_rst */
+			0x1bc (PIN_OUTPUT | MUX_MODE4)		/* ccdc_wen.gpio_98 */
+			/* vusb_en */
+			0x1a8 (PIN_OUTPUT | MUX_MODE4)		/* mcspi2_simo.gpio_179 */
+			/* usb_rst2 */
+			0x150 (PIN_OUTPUT_PULLUP | MUX_MODE4)	/* uart1_cts.gpio_150 */
 		>;
 	};
 
@@ -434,7 +450,7 @@
 &omap3_pmx_core2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <
-		&led_2_pins
+		&led_2_pins &hsusb1_2_pins
 	>;
 
 	led_2_pins: pinmux_led_2_pins {
@@ -442,6 +458,23 @@
 			OMAP3430_CORE2_IOPAD(0x25f6, PIN_OUTPUT | MUX_MODE4) /* etk_d13.gpio_27 */
 			OMAP3430_CORE2_IOPAD(0x25fa, PIN_OUTPUT | MUX_MODE4) /* etk_d15.gpio_29 */
 			OMAP3430_CORE2_IOPAD(0x25f4, PIN_OUTPUT | MUX_MODE4) /* etk_d12.gpio_26 */
+		>;
+	};
+
+	hsusb1_2_pins: pinmux_hsusb1_2_pins {
+		pinctrl-single,pins = <
+			OMAP3430_CORE2_IOPAD(0x25d8, PIN_OUTPUT | MUX_MODE3)  /* etk_clk.hsusb1_stp */
+			OMAP3430_CORE2_IOPAD(0x25da, PIN_INPUT | MUX_MODE3)   /* etk_ctl.hsusb1_clk */
+			OMAP3430_CORE2_IOPAD(0x25dc, PIN_INPUT | MUX_MODE3)   /* etk_d0.hsusb1_data0 */
+			OMAP3430_CORE2_IOPAD(0x25de, PIN_INPUT | MUX_MODE3)   /* etk_d1.hsusb1_data1 */
+			OMAP3430_CORE2_IOPAD(0x25e0, PIN_INPUT | MUX_MODE3)   /* etk_d2.hsusb1_data2 */
+			OMAP3430_CORE2_IOPAD(0x25e2, PIN_INPUT | MUX_MODE3)   /* etk_d3.hsusb1_data7 */
+			OMAP3430_CORE2_IOPAD(0x25e4, PIN_INPUT | MUX_MODE3)   /* etk_d4.hsusb1_data4 */
+			OMAP3430_CORE2_IOPAD(0x25e6, PIN_INPUT | MUX_MODE3)   /* etk_d5.hsusb1_data5 */
+			OMAP3430_CORE2_IOPAD(0x25e8, PIN_INPUT | MUX_MODE3)   /* etk_d6.hsusb1_data6 */
+			OMAP3430_CORE2_IOPAD(0x25ea, PIN_INPUT | MUX_MODE3)   /* etk_d7.hsusb1_data3 */
+			OMAP3430_CORE2_IOPAD(0x25ec, PIN_INPUT | MUX_MODE3)   /* etk_d8.hsusb1_dir */
+			OMAP3430_CORE2_IOPAD(0x25ee, PIN_INPUT | MUX_MODE3)   /* etk_d9.hsusb1_nxt */
 		>;
 	};
 };
