@@ -305,7 +305,7 @@
 			/* vlcd_en */
 			0x0a0 (PIN_OUTPUT_PULLUP | MUX_MODE4)	/* gpmc_wait2.gpio_64 */
 			/* lcd_rst */
-			0x1bc (PIN_OUTPUT | MUX_MODE4)		/* ccdc_wen.gpio_98 */
+			0x1bc (PIN_OUTPUT_PULLUP | MUX_MODE4)		/* ccdc_wen.gpio_98 */
 			/* vusb_en */
 			0x1a8 (PIN_OUTPUT | MUX_MODE4)		/* mcspi2_simo.gpio_179 */
 			/* usb_rst2 */
@@ -406,10 +406,10 @@
 
 	spi1_pins: pinmux_spi1_pins {
 		pinctrl-single,pins = <
-			OMAP3_CORE1_IOPAD(0x21c8, PIN_INPUT | MUX_MODE0)   /* mcspi1_clk.mcspi1_clk */
-			OMAP3_CORE1_IOPAD(0x21ca, PIN_INPUT | MUX_MODE0)   /* mcspi1_simo.mcspi1_simo */
+			OMAP3_CORE1_IOPAD(0x21c8, PIN_OUTPUT_PULLUP | MUX_MODE0)   /* mcspi1_clk.mcspi1_clk */
+			OMAP3_CORE1_IOPAD(0x21ca, PIN_OUTPUT | MUX_MODE0)   /* mcspi1_simo.mcspi1_simo */
 			OMAP3_CORE1_IOPAD(0x21cc, PIN_INPUT | MUX_MODE0)   /* mcspi1_somi.mcspi1_somi */
-			OMAP3_CORE1_IOPAD(0x21ce, PIN_INPUT_PULLDOWN | MUX_MODE0)   /* mcspi1_cs0.mcspi1_cs0 */
+			OMAP3_CORE1_IOPAD(0x21ce, PIN_OUTPUT_PULLUP | MUX_MODE0)   /* mcspi1_cs0.mcspi1_cs0 */
 		>;
 	};
 
