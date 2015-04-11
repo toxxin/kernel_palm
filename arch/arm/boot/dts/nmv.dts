@@ -150,7 +150,7 @@
 		};
 
 		panel-timing {
-			clock-frequency = <24284>;  /* 12000 */
+			clock-frequency = <30355200>;  /* 75Hz */
 			hactive = <480>;
 			vactive = <800>;
 			hfront-porch = <8>;
