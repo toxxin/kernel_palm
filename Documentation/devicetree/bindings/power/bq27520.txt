@@ -1,0 +1,9 @@
+Binding for TI bq7520 Li-Ion Charger
+ 
+Required properties:
+- compatible: "ti,bq27520"
+- reg: integer, i2c address of the device.
+- ti,enable-gpio: Should contain a phandle + gpio-specifier
+to the GPIO pin connected to the chip's enable pin.
+- ti,bat-good: Battery good gpio pin
+- ti,soc_int: Interrupt gpio pin
