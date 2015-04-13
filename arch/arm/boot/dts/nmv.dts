@@ -233,6 +233,13 @@
 	pinctrl-0 = <&i2c2_pins>;
 
 	clock-frequency = <400000>;
+
+	lis331dlh: lis331dlh@1d {
+		compatible = "st,lis331dlh", "st,lis3lv02d";
+		reg = <0x1d>;
+		Vdd-supply = <&vaux33_reg>;
+		Vdd_IO-supply = <&vdd2_reg>;
+	};
 };
 
 &i2c3 {
@@ -535,6 +542,12 @@
 
 		/* VAUX2 unused */
 		/* VDD3 unused */
+
+		vaux33_reg: regulator@11 {
+			/* VAUX33 */
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+		};
 
 		vmmc_reg: regulator@12 {
 			/* VDD_eMMC */
