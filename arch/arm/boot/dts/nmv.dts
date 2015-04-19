@@ -188,7 +188,7 @@
 		regulator-min-microvolt = <4700000>;
 		regulator-max-microvolt = <4700000>;
 		regulator-boot-on;
-		gpio = <&gpio3 0 GPIO_ACTIVE_HIGH>;
+		gpio = <&gpio3 0 GPIO_ACTIVE_HIGH>;  /* gpio_64 */
 		enable-active-high;
 	};
 
