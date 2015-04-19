@@ -234,9 +234,9 @@
 
 	clock-frequency = <400000>;
 
-	lis331dlh: lis331dlh@1d {
+	lis331dlh: lis331dlh@18 {
 		compatible = "st,lis331dlh", "st,lis3lv02d";
-		reg = <0x1d>;
+		reg = <0x18>;
 		Vdd-supply = <&vaux33_reg>;
 		Vdd_IO-supply = <&vdd2_reg>;
 	};
