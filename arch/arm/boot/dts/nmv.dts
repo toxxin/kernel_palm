@@ -240,6 +240,14 @@
 		Vdd-supply = <&vdd2_reg>;
 		Vdd_IO-supply = <&vdd2_reg>;
 	};
+
+	bmp180: bmp180@77 {
+		compatible = "bosch,bmp085";
+		reg = <0x77>;
+		chip-id = <55>;
+		temp-measurement-period = <300>;
+		default-oversampling = <2>;
+	};
 };
 
 &i2c3 {
