@@ -16,6 +16,7 @@
 
 	chosen {
 		bootargs = "console=ttyO2,115200 root=/dev/nfs nfsroot=192.168.0.78:/srv/nmv/ ip=192.168.0.101:192.168.0.78:192.168.0.1:255.255.255.0:arm:eth0:off";
+		/*bootargs = "console=ttyO2,115200 root=/dev/ram0 rw ip=192.168.0.101:192.168.0.78:192.168.0.1:255.255.255.0:arm:eth0:off";*/
 	};
 
 	memory {
