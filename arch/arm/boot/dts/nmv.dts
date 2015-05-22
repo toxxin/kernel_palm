@@ -314,7 +314,7 @@
 &omap3_pmx_core {
 	pinctrl-names = "default";
 	pinctrl-0 = <
-		&ctrl_pins &led_1_pins &matrix_pins
+		&ctrl_pins &led_1_pins &matrix_pins &chg_pins
 	>;
 
 	ctrl_pins: pinmux_ctrl_pins {
@@ -462,6 +462,15 @@
 			0x1b0 (PIN_INPUT_PULLUP | MUX_MODE0) /* sys_nirq.sys_nirq */
 		>;
 	};
+
+	/* Battery charger gpios */
+	chg_pins: pinmux_chg_pins {
+		pinctrl-single,pins = <
+			0x156 (PIN_INPUT_PULLUP | MUX_MODE4) /* mcbsp4_dr.gpio_153 */
+			0x15a (PIN_INPUT_PULLUP | MUX_MODE4) /* mcbsp4_fsx.gpio_155 */
+			0x140 (PIN_INPUT_PULLUP | MUX_MODE4) /* mcbsp3_clkx.gpio_142 */
+		>;
+    };
 };
 
 &omap3_pmx_core2 {
