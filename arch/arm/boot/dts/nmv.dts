@@ -271,7 +271,13 @@
 };
 
 &mmc2 {
-      status = "disabled";
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc2_pins>;
+	vmmc-supply = <&vio_reg>;
+	non-removable;
+	bus-width = <4>;
+	cap-power-off-card;
+	status = "disabled";
 };
 
 &mmc3 {
