@@ -382,6 +382,21 @@
 		 >;
 	};
 
+	mmc2_pins: pinmux_mmc2_pins {
+		pinctrl-single,pins = <
+			0x128 (PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc2_clk */
+			0x12a (PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc2_cmd */
+			0x12c (PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc2_dat0 */
+			0x12e (PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc2_dat1 */
+			0x130 (PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc2_dat2 */
+			0x132 (PIN_INPUT_PULLUP | MUX_MODE0)	/* sdmmc2_dat3 */
+			0x134 (PIN_OUTPUT | MUX_MODE1)			/* sdmmc2_dat4.sdmmc2_dir_dat0 */
+			0x136 (PIN_OUTPUT | MUX_MODE1)			/* sdmmc2_dat5.sdmmc2_dir_dat1 */
+			0x138 (PIN_OUTPUT | MUX_MODE1)			/* sdmmc2_dat6.sdmmc2_dir_cmd */
+			0x13a (PIN_INPUT | MUX_MODE1)			/* sdmmc2_dat7.sdmmc2_clkin */
+		>;
+	};
+
 	dss_dpi_pins: pinmux_dss_dpi_pins {
 		pinctrl-single,pins = <
 			OMAP3_CORE1_IOPAD(0x20d4, PIN_OUTPUT | MUX_MODE0)       /* dss_pclk.dss_pclk */
@@ -534,6 +549,7 @@
 		};
 
 		vio_reg: regulator@1 {
+			/* VDD18 */
 			regulator-always-on;
 		};
 
