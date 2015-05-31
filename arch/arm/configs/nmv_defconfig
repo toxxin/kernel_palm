@@ -745,7 +745,13 @@ CONFIG_NET_FLOW_LIMIT=y
 # CONFIG_IRDA is not set
 # CONFIG_BT is not set
 # CONFIG_AF_RXRPC is not set
-# CONFIG_WIRELESS is not set
+CONFIG_WIRELESS=y
+# CONFIG_CFG80211 is not set
+# CONFIG_LIB80211 is not set
+
+#
+# CFG80211 needs to be enabled for MAC80211
+#
 # CONFIG_WIMAX is not set
 # CONFIG_RFKILL is not set
 # CONFIG_RFKILL_REGULATOR is not set
@@ -1042,7 +1048,9 @@ CONFIG_SMSC_PHY=y
 # CONFIG_USB_RTL8152 is not set
 # CONFIG_USB_USBNET is not set
 # CONFIG_USB_IPHETH is not set
-# CONFIG_WLAN is not set
+CONFIG_WLAN=y
+# CONFIG_HOSTAP is not set
+CONFIG_WL_TI=y
 
 #
 # Enable WiMAX (Networking options) to see the WiMAX drivers
