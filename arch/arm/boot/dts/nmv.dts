@@ -333,6 +333,13 @@
 			0x1a8 (PIN_OUTPUT | MUX_MODE4)		/* mcspi2_simo.gpio_179 */
 			/* usb_rst2 */
 			0x150 (PIN_OUTPUT_PULLUP | MUX_MODE4)	/* uart1_cts.gpio_150 */
+			/* TODO: Add wireless ctrl pins */
+			/* WL_EN */
+			/* BT_EN */
+			/* SWITCH_EN */
+			/* BT_HOST_WAKEUP */
+			/* BT_WAKEUP */
+			/* WL_IRQ */
 		>;
 	};
 
