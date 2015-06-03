@@ -320,26 +320,29 @@
 &omap3_pmx_core {
 	pinctrl-names = "default";
 	pinctrl-0 = <
-		&ctrl_pins &led_1_pins &matrix_pins &chg_pins
+		&ctrl_1_pins &led_1_pins &matrix_pins &chg_pins
 	>;
 
-	ctrl_pins: pinmux_ctrl_pins {
+	ctrl_1_pins: pinmux_ctrl_1_pins {
 		pinctrl-single,pins = <
 			/* vlcd_en */
 			0x0a0 (PIN_OUTPUT_PULLUP | MUX_MODE4)	/* gpmc_wait2.gpio_64 */
 			/* lcd_rst */
-			0x1bc (PIN_OUTPUT_PULLUP | MUX_MODE4)		/* ccdc_wen.gpio_98 */
+			0x1bc (PIN_OUTPUT_PULLUP | MUX_MODE4)	/* ccdc_wen.gpio_98 */
 			/* vusb_en */
-			0x1a8 (PIN_OUTPUT | MUX_MODE4)		/* mcspi2_simo.gpio_179 */
+			0x1a8 (PIN_OUTPUT | MUX_MODE4)			/* mcspi2_simo.gpio_179 */
 			/* usb_rst2 */
 			0x150 (PIN_OUTPUT_PULLUP | MUX_MODE4)	/* uart1_cts.gpio_150 */
-			/* TODO: Add wireless ctrl pins */
 			/* WL_EN */
+			0x1cc (PIN_OUTPUT | MUX_MODE4)			/* ccdc_data7.gpio_106 */
 			/* BT_EN */
+			0x1c2 (PIN_OUTPUT | MUX_MODE4)			/* ccdc_data2.gpio_101 */
 			/* SWITCH_EN */
-			/* BT_HOST_WAKEUP */
+			0x110 (PIN_OUTPUT | MUX_MODE4)			/* mcbsp2_dr.gpio_110 */
 			/* BT_WAKEUP */
+			0x1c4 (PIN_INPUT | MUX_MODE4)			/* ccdc_data3.gpio_102 */
 			/* WL_IRQ */
+			0x08c (PIN_INPUT | MUX_MODE4)			/* gpmc_ncs7.gpio_58 */
 		>;
 	};
 
@@ -511,6 +514,13 @@
 	pinctrl-0 = <
 		&led_2_pins &hsusb1_2_pins
 	>;
+
+	ctrl_2_pins: pinmux_ctrl_2_pins {
+		pinctrl-single,pins = <
+			/* BT_HOST_WAKEUP */
+			OMAP3430_CORE2_IOPAD(0x25f8, PIN_INPUT | MUX_MODE4) /* etk_d14.gpio_28 */
+		>;
+	};
 
 	led_2_pins: pinmux_led_2_pins {
 		pinctrl-single,pins = <
