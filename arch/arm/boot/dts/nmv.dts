@@ -264,9 +264,10 @@
 };
 
 &mmc1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc1_pins>;
 	vmmc-supply = <&vmmc_reg>;
 	bus-width = <8>;
-	pinctrl-0 = <&mmc1_pins>;
 	status = "okay";
 };
 
@@ -385,16 +386,16 @@
 
 	mmc1_pins: pinmux_mmc1_pins {
 		pinctrl-single,pins = <
-			0x114 (PIN_OUTPUT_PULLUP | MUX_MODE0)  /* sdmmc1_clk.sdmmc1_clk */
-			0x116 (PIN_INPUT | MUX_MODE0)  /* sdmmc1_cmd.sdmmc1_cmd */
-			0x118 (PIN_INPUT | MUX_MODE0)  /* sdmmc1_dat0.sdmmc1_dat0 */
-			0x11a (PIN_INPUT | MUX_MODE0)  /* sdmmc1_dat1.sdmmc1_dat1 */
-			0x11c (PIN_INPUT | MUX_MODE0)  /* sdmmc1_dat2.sdmmc1_dat2 */
-			0x11e (PIN_INPUT | MUX_MODE0)  /* sdmmc1_dat3.sdmmc1_dat3 */
-			0x120 (PIN_INPUT | MUX_MODE0)  /* sdmmc1_dat4.sdmmc1_dat4 */
-			0x122 (PIN_INPUT | MUX_MODE0)  /* sdmmc1_dat5.sdmmc1_dat5 */
-			0x124 (PIN_INPUT | MUX_MODE0)  /* sdmmc1_dat6.sdmmc1_dat6 */
-			0x126 (PIN_INPUT | MUX_MODE0)  /* sdmmc1_dat7.sdmmc1_dat7 */
+			0x114 (PIN_INPUT_PULLUP | MUX_MODE0)  /* sdmmc1_clk.sdmmc1_clk */
+			0x116 (PIN_INPUT_PULLUP | MUX_MODE0)  /* sdmmc1_cmd.sdmmc1_cmd */
+			0x118 (PIN_INPUT_PULLUP | MUX_MODE0)  /* sdmmc1_dat0.sdmmc1_dat0 */
+			0x11a (PIN_INPUT_PULLUP | MUX_MODE0)  /* sdmmc1_dat1.sdmmc1_dat1 */
+			0x11c (PIN_INPUT_PULLUP | MUX_MODE0)  /* sdmmc1_dat2.sdmmc1_dat2 */
+			0x11e (PIN_INPUT_PULLUP | MUX_MODE0)  /* sdmmc1_dat3.sdmmc1_dat3 */
+			0x120 (PIN_INPUT_PULLUP | MUX_MODE0)  /* sdmmc1_dat4.sdmmc1_dat4 */
+			0x122 (PIN_INPUT_PULLUP | MUX_MODE0)  /* sdmmc1_dat5.sdmmc1_dat5 */
+			0x124 (PIN_INPUT_PULLUP | MUX_MODE0)  /* sdmmc1_dat6.sdmmc1_dat6 */
+			0x126 (PIN_INPUT_PULLUP | MUX_MODE0)  /* sdmmc1_dat7.sdmmc1_dat7 */
 		 >;
 	};
 
