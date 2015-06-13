@@ -236,6 +236,14 @@
 
 	clock-frequency = <400000>;
 
+	bq27520: bq27520@55 {
+		compatible = "ti,bq27520";
+		reg = <0x55>;
+		ti,enable-gpio = <&gpio2 22 1>;		/* gpio_54 */
+		ti,bat-good = <&gpio2 24 1>;		/* gpio_56 */
+		ti,soc_int = <&gpio2 23 1>;			/* gpio_55 */
+	};
+
 	lis331dlh: lis331dlh@18 {
 		compatible = "st,lis331dlh", "st,lis3lv02d";
 		reg = <0x18>;
