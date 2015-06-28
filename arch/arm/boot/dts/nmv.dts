@@ -625,6 +625,7 @@
 			/* VDD_eMMC */
 			regulator-min-microvolt = <3300000>;
 			regulator-max-microvolt = <3300000>;
+			regulator-always-on;
 		};
 
 		vdd1_reg: regulator@2 {
