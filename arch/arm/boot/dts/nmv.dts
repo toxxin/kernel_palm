@@ -15,7 +15,8 @@
 	compatible = "ti,am3517-evm", "ti,am3517", "ti,omap3";
 
 	chosen {
-		bootargs = "console=ttyO2,115200n8 root=/dev/nfs rw nfsroot=192.168.0.78:/srv/nmv_wheezy ip=192.168.0.100:192.168.0.78:192.168.0.1:255.255.0.0:arm:eth0:off mem=256M vram=10M omapfb.vram=0:4M,1:3M,2:3M";
+		/*bootargs = "console=ttyO2,115200n8 root=/dev/nfs rw nfsroot=192.168.0.78:/srv/nmv_wheezy ip=192.168.0.100:192.168.0.78:192.168.0.1:255.255.0.0:arm:eth0:off mem=256M vram=10M omapfb.vram=0:4M,1:3M,2:3M";*/
+		bootargs = "console=ttyO2,115200n8 root=/dev/nfs rw nfsroot=192.168.0.78:/srv/nmv_wheezy ip=192.168.0.100:192.168.0.78:192.168.0.1:255.255.0.0:arm:eth0:off mem=256M";
 		/*bootargs = "console=ttyO2,115200 root=/dev/ram0 rw ip=192.168.0.101:192.168.0.78:192.168.0.1:255.255.255.0:arm:eth0:off";*/
 		/*bootargs = "console=ttyO2,115200 noinitrd root=/dev/mmcblk0p2 rootfstype=ext3 rw rootdelay=1";*/
 	};
