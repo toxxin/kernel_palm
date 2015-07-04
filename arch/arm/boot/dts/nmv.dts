@@ -143,9 +143,6 @@
 		compatible = "panel-dpi";
 		label = "lcd";
 
-		pinctrl-names = "default";
-		pinctrl-0 = <&lcd_pins>;
-
 		port {
 			lcd_in: endpoint {
 				remote-endpoint = <&dpi_out>;
@@ -453,12 +450,6 @@
 			OMAP3_CORE1_IOPAD(0x2106, PIN_OUTPUT | MUX_MODE0)       /* dss_data21.dss_data21 */
 			OMAP3_CORE1_IOPAD(0x2108, PIN_OUTPUT | MUX_MODE0)       /* dss_data22.dss_data22 */
 			OMAP3_CORE1_IOPAD(0x210a, PIN_OUTPUT | MUX_MODE0)       /* dss_data23.dss_data23 */
-		>;
-	};
-
-	lcd_pins: pinmux_lcd_pins {
-		pinctrl-single,pins = <
-			0x0a2(PIN_OUTPUT | MUX_MODE4)       /* gpmc_wait3.gpio_65 */
 		>;
 	};
 
