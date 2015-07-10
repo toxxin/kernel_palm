@@ -336,9 +336,9 @@ static int ams369fg06_power_on(struct ams369fg06 *lcd)
 */
 
 	mdelay(200);
-	gpio_set_value(98, 0);
+	gpio_set_value(lcd->reset, 0);
 	mdelay(5);
-	gpio_set_value(98, 1);
+	gpio_set_value(lcd->reset, 1);
 	mdelay(500);
 
 	ret = ams369fg06_ldi_init(lcd);
