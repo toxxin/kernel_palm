@@ -462,37 +462,21 @@ static const struct backlight_ops ams369fg06_backlight_ops = {
 
 
 #ifdef CONFIG_OF
-static struct ams369fg06_bl_pdata *
-ams369fg06_bl_parse_dt(struct platform_device *pdev)
+static int ams369fg06_bl_parse_dt(struct device *dev, struct ams369fg06 *lcd)
 {
-	/* struct spi_device *spi = dev_get_drvdata(pdev->dev.parent); */
-	/* struct device_node *node = of_node_get(pdev->dev.of_node); */
-	u32 val;
 
-	printk(KERN_DEBUG "---------------->AMS369_PARSE_DT_FUNC\n");
-	
-	/*
-	node = of_find_node_by_name(node, "backlight");
-	if (!node)
-		return ERR_PTR(-ENODEV);
+	lcd->reset = of_get_named_gpio(dev->of_node, "gpio-rst", 0);
+	if (!gpio_is_valid(lcd->reset)) {
+		dev_err(dev, "Missing dt property: gpios-reset\n");
+		return -EINVAL;
+	}
 
-	else
-		printk(KERN_DEBUG "------------>Node found");
-	*/
-	/*
-	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
-	if (!pdata) {
-		err = ERR_PTR(-ENOMEM);
-		goto err;
-	}*/
-
-	return NULL;
+	return 0;
 }
 #else
-static struct ams369fg06_bl_pdata *
-ams369fg06_bl_parse_dt(struct platform_device *pdev)
+static int ams369fg06_bl_parse_dt(struct device *dev, struct ams369fg06 *lcd)
 {
-	return NULL;
+	return 0;
 }
 #endif
 
