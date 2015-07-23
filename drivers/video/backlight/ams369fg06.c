@@ -43,6 +43,7 @@ struct ams369fg06 {
 	unsigned int			power;
 	struct lcd_device		*ld;
 	struct backlight_device		*bd;
+	struct lcd_platform_data	*lcd_pd;
 	int (*reset)(struct lcd_device *ld);
 	int (*power_on)(struct lcd_device *ld, int enable);
 	unsigned int			resetpin;
@@ -492,6 +493,9 @@ static int ams369fg06_bl_parse_dt(struct device *dev, struct ams369fg06 *lcd)
 
 	lcd->reset = &ams369fg06_reset;
 	lcd->power_on = NULL;
+
+	lcd->lcd_pd->reset = &ams369fg06_reset;
+	lcd->lcd_pd->power_on = NULL;
 
 	return 0;
 }
