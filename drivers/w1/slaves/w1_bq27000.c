@@ -15,7 +15,7 @@
 #include <linux/types.h>
 #include <linux/platform_device.h>
 #include <linux/mutex.h>
-#include <linux/power/bq27x00_battery.h>
+#include <linux/power/bq27xxx_battery.h>
 
 #include "../w1.h"
 #include "../w1_int.h"
