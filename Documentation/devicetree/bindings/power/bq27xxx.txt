@@ -1,0 +1,19 @@
+Binding for TI bq27xxx battery driver
+
+Required properties:
+- compatible:
+	- "ti,bq27000" for bq27000, bq27200
+	- "ti,bq27010" for bq27010, bq27210
+	- "ti,bq27500" for bq27500, bq27510, bq27520
+	- "ti,bq27530" for bq27530, bq27531
+	- "ti,bq27541" for bq27541, bq27542, bq27546, bq27742
+	- "ti,bq27545" for bq27545
+	- "ti,bq27421" for bq27421, bq27425, bq27441, bq27621
+
+Optional properties:
+- reg: integer, i2c address of the device.
+- ti,enable-gpio: Should contain a phandle + gpio-specifier
+to the GPIO pin connected to the chip's enable pin.
+- ti,bat-good: Battery good gpio pin
+- ti,soc_int: Interrupt gpio pin
+- ti,gpout: General Purpose open-drain output
