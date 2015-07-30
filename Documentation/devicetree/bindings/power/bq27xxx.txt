@@ -15,5 +15,14 @@ Optional properties:
 - ti,enable-gpio: Should contain a phandle + gpio-specifier
 to the GPIO pin connected to the chip's enable pin.
 - ti,bat-good: Battery good gpio pin
-- ti,soc_int: Interrupt gpio pin
+- ti,soc-int: Interrupt gpio pin
 - ti,gpout: General Purpose open-drain output
+
+Examples:
+
+bq27520: bq27520@55 {
+	compatible = "ti,bq27500";
+	reg = <0x55>;
+	ti,enable-gpio = <&gpio2 22 1>;
+	ti,soc-int = <&gpio2 22 2>;
+};
