@@ -40,6 +40,7 @@
 #include <linux/i2c.h>
 #include <linux/slab.h>
 #include <asm/unaligned.h>
+#include <linux/of.h>
 
 #include <linux/power/bq27xxx_battery.h>
 
@@ -135,7 +136,7 @@ struct bq27xxx_device_info {
 	unsigned long last_update;
 	struct delayed_work work;
 
-	struct power_supply	*bat;
+	struct power_supply		bat;
 
 	struct bq27xxx_access_methods bus;
 
@@ -423,7 +424,6 @@ MODULE_PARM_DESC(poll_interval,
 /*
  * Common code for BQ27xxx devices
  */
-
 static inline int bq27xxx_read(struct bq27xxx_device_info *di, int reg_index,
 			       bool single)
 {
@@ -610,7 +610,7 @@ static int bq27xxx_battery_read_pwr_avg(struct bq27xxx_device_info *di)
 
 	tval = bq27xxx_read(di, BQ27XXX_REG_AP, false);
 	if (tval < 0) {
-		dev_err(di->dev, "error reading average power register  %02x: %d\n",
+		dev_dbg(di->dev, "error reading average power register  %02x: %d\n",
 			BQ27XXX_REG_AP, tval);
 		return tval;
 	}
@@ -724,7 +724,7 @@ static void bq27xxx_battery_update(struct bq27xxx_device_info *di)
 	}
 
 	if (di->cache.capacity != cache.capacity)
-		power_supply_changed(di->bat);
+		power_supply_changed(&di->bat);
 
 	if (memcmp(&di->cache, &cache, sizeof(cache)) != 0)
 		di->cache = cache;
@@ -790,7 +790,7 @@ static int bq27xxx_battery_status(struct bq27xxx_device_info *di,
 			status = POWER_SUPPLY_STATUS_FULL;
 		else if (di->cache.flags & BQ27000_FLAG_CHGS)
 			status = POWER_SUPPLY_STATUS_CHARGING;
-		else if (power_supply_am_i_supplied(di->bat))
+		else if (power_supply_am_i_supplied(&di->bat))
 			status = POWER_SUPPLY_STATUS_NOT_CHARGING;
 		else
 			status = POWER_SUPPLY_STATUS_DISCHARGING;
@@ -874,7 +874,8 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
 					union power_supply_propval *val)
 {
 	int ret = 0;
-	struct bq27xxx_device_info *di = power_supply_get_drvdata(psy);
+	//struct bq27xxx_device_info *di = power_supply_get_drvdata(psy);
+	struct bq27xxx_device_info *di = container_of(psy, struct bq27xxx_device_info, bat);
 
 	mutex_lock(&di->lock);
 	if (time_is_before_jiffies(di->last_update + 5 * HZ)) {
@@ -955,7 +956,8 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
 
 static void bq27xxx_external_power_changed(struct power_supply *psy)
 {
-	struct bq27xxx_device_info *di = power_supply_get_drvdata(psy);
+	//struct bq27xxx_device_info *di = power_supply_get_drvdata(psy);
+	struct bq27xxx_device_info *di = container_of(psy, struct bq27xxx_device_info, bat);
 
 	cancel_delayed_work_sync(&di->work);
 	schedule_delayed_work(&di->work, 0);
@@ -965,50 +967,50 @@ static int bq27xxx_powersupply_init(struct bq27xxx_device_info *di,
 				    const char *name)
 {
 	int ret;
-	struct power_supply_desc *psy_desc;
-	struct power_supply_config psy_cfg = { .drv_data = di, };
 
-	psy_desc = devm_kzalloc(di->dev, sizeof(*psy_desc), GFP_KERNEL);
-	if (!psy_desc)
-		return -ENOMEM;
-
-	psy_desc->name = name;
-	psy_desc->type = POWER_SUPPLY_TYPE_BATTERY;
+	di->bat.name = name;
+	di->bat.type = POWER_SUPPLY_TYPE_BATTERY;
 	if (di->chip == BQ27000) {
-		psy_desc->properties = bq27000_battery_props;
-		psy_desc->num_properties = ARRAY_SIZE(bq27000_battery_props);
+		di->bat.properties = bq27000_battery_props;
+		di->bat.num_properties = ARRAY_SIZE(bq27000_battery_props);
 	} else if (di->chip == BQ27010) {
-		psy_desc->properties = bq27010_battery_props;
-		psy_desc->num_properties = ARRAY_SIZE(bq27010_battery_props);
+		di->bat.properties = bq27010_battery_props;
+		di->bat.num_properties = ARRAY_SIZE(bq27010_battery_props);
 	} else if (di->chip == BQ27500) {
-		psy_desc->properties = bq27500_battery_props;
-		psy_desc->num_properties = ARRAY_SIZE(bq27500_battery_props);
+		di->bat.properties = bq27500_battery_props;
+		di->bat.num_properties = ARRAY_SIZE(bq27500_battery_props);
 	} else if (di->chip == BQ27530) {
-		psy_desc->properties = bq27530_battery_props;
-		psy_desc->num_properties = ARRAY_SIZE(bq27530_battery_props);
+		di->bat.properties = bq27530_battery_props;
+		di->bat.num_properties = ARRAY_SIZE(bq27530_battery_props);
 	} else if (di->chip == BQ27541) {
-		psy_desc->properties = bq27541_battery_props;
-		psy_desc->num_properties = ARRAY_SIZE(bq27541_battery_props);
+		di->bat.properties = bq27541_battery_props;
+		di->bat.num_properties = ARRAY_SIZE(bq27541_battery_props);
 	} else if (di->chip == BQ27545) {
-		psy_desc->properties = bq27545_battery_props;
-		psy_desc->num_properties = ARRAY_SIZE(bq27545_battery_props);
+		di->bat.properties = bq27545_battery_props;
+		di->bat.num_properties = ARRAY_SIZE(bq27545_battery_props);
 	} else {
-		psy_desc->properties = bq27421_battery_props;
-		psy_desc->num_properties = ARRAY_SIZE(bq27421_battery_props);
+		di->bat.properties = bq27421_battery_props;
+		di->bat.num_properties = ARRAY_SIZE(bq27421_battery_props);
 	}
-	psy_desc->get_property = bq27xxx_battery_get_property;
-	psy_desc->external_power_changed = bq27xxx_external_power_changed;
+	di->bat.get_property = bq27xxx_battery_get_property;
+	di->bat.external_power_changed = bq27xxx_external_power_changed;
 
 	INIT_DELAYED_WORK(&di->work, bq27xxx_battery_poll);
 	mutex_init(&di->lock);
 
+	ret = power_supply_register_no_ws(di->dev, &di->bat);
+	if (ret) {
+		dev_err(di->dev, "----------->failed: power supply register");
+		return ret;
+	};
+/*
 	di->bat = power_supply_register_no_ws(di->dev, psy_desc, &psy_cfg);
 	if (IS_ERR(di->bat)) {
 		ret = PTR_ERR(di->bat);
 		dev_err(di->dev, "failed to register battery: %d\n", ret);
 		return ret;
 	}
-
+*/
 	dev_info(di->dev, "support ver. %s enabled\n", DRIVER_VERSION);
 
 	bq27xxx_battery_update(di);
@@ -1028,7 +1030,7 @@ static void bq27xxx_powersupply_unregister(struct bq27xxx_device_info *di)
 
 	cancel_delayed_work_sync(&di->work);
 
-	power_supply_unregister(di->bat);
+	power_supply_unregister(&di->bat);
 
 	mutex_destroy(&di->lock);
 }
@@ -1077,10 +1079,21 @@ static int bq27xxx_battery_i2c_read(struct bq27xxx_device_info *di, u8 reg,
 	return ret;
 }
 
+#ifdef CONFIG_OF
+static const struct of_device_id bq27xxx_dt_ids[] = {
+		{.compatible = "ti,bq27000", },
+		{.compatible = "ti,bq27010", },
+		{.compatible = "ti,bq27520", },
+		{.compatible = "ti,bq27530", },
+		{},
+};
+MODULE_DEVICE_TABLE(of, bq27xxx_dt_ids);
+#endif
+
 static int bq27xxx_battery_i2c_probe(struct i2c_client *client,
 				     const struct i2c_device_id *id)
 {
-	char *name;
+	char *name = "bq27xxx-battery";
 	struct bq27xxx_device_info *di;
 	int num;
 	int retval = 0;
@@ -1092,12 +1105,13 @@ static int bq27xxx_battery_i2c_probe(struct i2c_client *client,
 	if (num < 0)
 		return num;
 
+#if 0
 	name = devm_kasprintf(&client->dev, GFP_KERNEL, "%s-%d", id->name, num);
 	if (!name) {
 		retval = -ENOMEM;
 		goto batt_failed;
 	}
-
+#endif
 	di = devm_kzalloc(&client->dev, sizeof(*di), GFP_KERNEL);
 	if (!di) {
 		retval = -ENOMEM;
@@ -1106,7 +1120,8 @@ static int bq27xxx_battery_i2c_probe(struct i2c_client *client,
 
 	di->id = num;
 	di->dev = &client->dev;
-	di->chip = id->driver_data;
+	//di->chip = id->driver_data;
+	di->chip = BQ27500;
 	di->bus.read = &bq27xxx_battery_i2c_read;
 
 	if (di->chip == BQ27000) {
@@ -1174,20 +1189,21 @@ MODULE_DEVICE_TABLE(i2c, bq27xxx_id);
 
 static struct i2c_driver bq27xxx_battery_i2c_driver = {
 	.driver = {
-		.name = "bq27xxx-battery",
+		.name = "bq27xxx",
+		.of_match_table = bq27xxx_dt_ids,
 	},
 	.probe = bq27xxx_battery_i2c_probe,
 	.remove = bq27xxx_battery_i2c_remove,
 	.id_table = bq27xxx_id,
 };
-
+#if 0
 static inline int bq27xxx_battery_i2c_init(void)
 {
 	int ret = i2c_add_driver(&bq27xxx_battery_i2c_driver);
 
-	if (ret)
+	if (ret){
 		pr_err("Unable to register BQ27xxx i2c driver\n");
-
+	}
 	return ret;
 }
 
@@ -1195,12 +1211,7 @@ static inline void bq27xxx_battery_i2c_exit(void)
 {
 	i2c_del_driver(&bq27xxx_battery_i2c_driver);
 }
-
-#else
-
-static inline int bq27xxx_battery_i2c_init(void) { return 0; }
-static inline void bq27xxx_battery_i2c_exit(void) {};
-
+#endif
 #endif
 
 /* platform specific code */
@@ -1287,7 +1298,7 @@ static struct platform_driver bq27xxx_battery_platform_driver = {
 		.name = "bq27000-battery",
 	},
 };
-
+#if 0
 static inline int bq27xxx_battery_platform_init(void)
 {
 	int ret = platform_driver_register(&bq27xxx_battery_platform_driver);
@@ -1302,18 +1313,13 @@ static inline void bq27xxx_battery_platform_exit(void)
 {
 	platform_driver_unregister(&bq27xxx_battery_platform_driver);
 }
-
-#else
-
-static inline int bq27xxx_battery_platform_init(void) { return 0; }
-static inline void bq27xxx_battery_platform_exit(void) {};
-
+#endif
 #endif
 
 /*
  * Module stuff
  */
-
+#if 0
 static int __init bq27xxx_battery_init(void)
 {
 	int ret;
@@ -1336,6 +1342,11 @@ static void __exit bq27xxx_battery_exit(void)
 	bq27xxx_battery_i2c_exit();
 }
 module_exit(bq27xxx_battery_exit);
+#endif
+
+
+module_i2c_driver(bq27xxx_battery_i2c_driver);
+
 
 #ifdef CONFIG_BATTERY_BQ27XXX_PLATFORM
 MODULE_ALIAS("platform:bq27xxx-battery");
