@@ -1083,8 +1083,11 @@ static int bq27xxx_battery_i2c_read(struct bq27xxx_device_info *di, u8 reg,
 static const struct of_device_id bq27xxx_dt_ids[] = {
 		{.compatible = "ti,bq27000", },
 		{.compatible = "ti,bq27010", },
-		{.compatible = "ti,bq27520", },
+		{.compatible = "ti,bq27500", },
 		{.compatible = "ti,bq27530", },
+		{.compatible = "ti,bq27541", },
+		{.compatible = "ti,bq27545", },
+		{.compatible = "ti,bq27421", },
 		{},
 };
 MODULE_DEVICE_TABLE(of, bq27xxx_dt_ids);
