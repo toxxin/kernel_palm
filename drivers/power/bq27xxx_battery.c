@@ -1100,6 +1100,7 @@ static int bq27xxx_battery_i2c_probe(struct i2c_client *client,
 	struct bq27xxx_device_info *di;
 	int num;
 	int retval = 0;
+struct device_node *np = client->dev.of_node;
 
 	/* Get new ID for the new battery device */
 	mutex_lock(&battery_mutex);
@@ -1125,6 +1126,19 @@ static int bq27xxx_battery_i2c_probe(struct i2c_client *client,
 	di->dev = &client->dev;
 	//di->chip = id->driver_data;
 	di->chip = BQ27500;
+	if (of_device_is_compatible(np, "ti,bq27000")) {
+		di->chip = BQ27000;
+	} else if (of_device_is_compatible(np, "ti,bq27010")) {
+		di->chip = BQ27010;
+	} else if (of_device_is_compatible(np, "ti,bq27500")) {
+		di->chip = BQ27500;
+	} else if (of_device_is_compatible(np, "ti,bq27530")) {
+		di->chip = BQ27530;
+	} else {
+		dev_err(&client->dev, "Unexpected gas gauge: %d\n", di->chip);
+		di->chip = BQ27000;
+	}
+
 	di->bus.read = &bq27xxx_battery_i2c_read;
 
 	if (di->chip == BQ27000) {
