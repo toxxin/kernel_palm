@@ -1203,6 +1203,7 @@ static struct i2c_driver bq27xxx_battery_i2c_driver = {
 	.remove = bq27xxx_battery_i2c_remove,
 	.id_table = bq27xxx_id,
 };
+#endif
 
 /* platform specific code */
 #ifdef CONFIG_BATTERY_BQ27XXX_PLATFORM
@@ -1288,6 +1289,7 @@ static struct platform_driver bq27xxx_battery_platform_driver = {
 		.name = "bq27000-battery",
 	},
 };
+#endif
 
 module_i2c_driver(bq27xxx_battery_i2c_driver);
 
