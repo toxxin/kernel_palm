@@ -874,7 +874,6 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
 					union power_supply_propval *val)
 {
 	int ret = 0;
-	//struct bq27xxx_device_info *di = power_supply_get_drvdata(psy);
 	struct bq27xxx_device_info *di = container_of(psy, struct bq27xxx_device_info, bat);
 
 	mutex_lock(&di->lock);
@@ -1000,17 +999,10 @@ static int bq27xxx_powersupply_init(struct bq27xxx_device_info *di,
 
 	ret = power_supply_register_no_ws(di->dev, &di->bat);
 	if (ret) {
-		dev_err(di->dev, "----------->failed: power supply register");
+		dev_err(di->dev, "failed: power supply register\n");
 		return ret;
 	};
-/*
-	di->bat = power_supply_register_no_ws(di->dev, psy_desc, &psy_cfg);
-	if (IS_ERR(di->bat)) {
-		ret = PTR_ERR(di->bat);
-		dev_err(di->dev, "failed to register battery: %d\n", ret);
-		return ret;
-	}
-*/
+
 	dev_info(di->dev, "support ver. %s enabled\n", DRIVER_VERSION);
 
 	bq27xxx_battery_update(di);
@@ -1109,13 +1101,6 @@ static int bq27xxx_battery_i2c_probe(struct i2c_client *client,
 	if (num < 0)
 		return num;
 
-#if 0
-	name = devm_kasprintf(&client->dev, GFP_KERNEL, "%s-%d", id->name, num);
-	if (!name) {
-		retval = -ENOMEM;
-		goto batt_failed;
-	}
-#endif
 	di = devm_kzalloc(&client->dev, sizeof(*di), GFP_KERNEL);
 	if (!di) {
 		retval = -ENOMEM;
@@ -1218,23 +1203,6 @@ static struct i2c_driver bq27xxx_battery_i2c_driver = {
 	.remove = bq27xxx_battery_i2c_remove,
 	.id_table = bq27xxx_id,
 };
-#if 0
-static inline int bq27xxx_battery_i2c_init(void)
-{
-	int ret = i2c_add_driver(&bq27xxx_battery_i2c_driver);
-
-	if (ret){
-		pr_err("Unable to register BQ27xxx i2c driver\n");
-	}
-	return ret;
-}
-
-static inline void bq27xxx_battery_i2c_exit(void)
-{
-	i2c_del_driver(&bq27xxx_battery_i2c_driver);
-}
-#endif
-#endif
 
 /* platform specific code */
 #ifdef CONFIG_BATTERY_BQ27XXX_PLATFORM
@@ -1320,55 +1288,8 @@ static struct platform_driver bq27xxx_battery_platform_driver = {
 		.name = "bq27000-battery",
 	},
 };
-#if 0
-static inline int bq27xxx_battery_platform_init(void)
-{
-	int ret = platform_driver_register(&bq27xxx_battery_platform_driver);
-
-	if (ret)
-		pr_err("Unable to register BQ27xxx platform driver\n");
-
-	return ret;
-}
-
-static inline void bq27xxx_battery_platform_exit(void)
-{
-	platform_driver_unregister(&bq27xxx_battery_platform_driver);
-}
-#endif
-#endif
-
-/*
- * Module stuff
- */
-#if 0
-static int __init bq27xxx_battery_init(void)
-{
-	int ret;
-
-	ret = bq27xxx_battery_i2c_init();
-	if (ret)
-		return ret;
-
-	ret = bq27xxx_battery_platform_init();
-	if (ret)
-		bq27xxx_battery_i2c_exit();
-
-	return ret;
-}
-module_init(bq27xxx_battery_init);
-
-static void __exit bq27xxx_battery_exit(void)
-{
-	bq27xxx_battery_platform_exit();
-	bq27xxx_battery_i2c_exit();
-}
-module_exit(bq27xxx_battery_exit);
-#endif
-
 
 module_i2c_driver(bq27xxx_battery_i2c_driver);
-
 
 #ifdef CONFIG_BATTERY_BQ27XXX_PLATFORM
 MODULE_ALIAS("platform:bq27xxx-battery");
