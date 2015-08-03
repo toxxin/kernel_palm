@@ -169,6 +169,29 @@ static struct ams369fg06_gamma gamma_table = {
 	.gamma_22_table[4] = (unsigned int *)&ams369fg06_22_250,
 };
 
+static int ams369fg06_spi_read_byte(struct ams369fg06 *lcd, int addr, u8 *data)
+{
+	u16 txbuf[1] = {(addr << 8)};
+	u16 rxbuf[1];
+	struct spi_message msg;
+	int ret;
+
+	struct spi_transfer xfer = {
+		.tx_buf		= txbuf,
+		.rx_buf		= rxbuf,
+		.len		= 2,
+	};
+
+	spi_message_init(&msg);
+	spi_message_add_tail(&xfer, &msg);
+
+	ret = spi_sync(lcd->spi, &msg);
+
+	*data = rxbuf;
+
+	return ret;
+}
+
 static int ams369fg06_spi_write_byte(struct ams369fg06 *lcd, int addr, int data)
 {
 	u16 buf[1];
@@ -529,7 +552,6 @@ static int ams369fg06_probe(struct spi_device *spi)
 
 	/* ams369fg06 lcd panel uses 3-wire 16bits SPI Mode. */
 	spi->bits_per_word = 16;
-	spi->mode = SPI_MODE_3;
 
 	ret = spi_setup(spi);
 	if (ret < 0) {
