@@ -171,14 +171,14 @@ static struct ams369fg06_gamma gamma_table = {
 
 static int ams369fg06_spi_read_byte(struct ams369fg06 *lcd, int addr, u8 *data)
 {
-	u16 txbuf[1] = {(addr << 8)};
-	u16 rxbuf[1];
+	u16 txbuf = (addr << 8);
+	u16 rxbuf;
 	struct spi_message msg;
 	int ret;
 
 	struct spi_transfer xfer = {
-		.tx_buf		= txbuf,
-		.rx_buf		= rxbuf,
+		.tx_buf		= &txbuf,
+		.rx_buf		= &rxbuf,
 		.len		= 2,
 	};
 
