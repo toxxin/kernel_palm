@@ -340,6 +340,26 @@ static int ams369fg06_power_is_on(int power)
 	return power <= FB_BLANK_NORMAL;
 }
 
+static int ams369fg06_check_hw(struct ams369fg06 *lcd)
+{
+	u8 code[2];
+	u8 revision;
+
+	ams369fg06_spi_write_byte(lcd, 0x70, 0x00);
+	ams369fg06_spi_read_byte(lcd, 0x71, &code[0]);
+	ams369fg06_spi_write_byte(lcd, 0x70, 0x01);
+	ams369fg06_spi_read_byte(lcd, 0x71, &code[1]);
+	ams369fg06_spi_write_byte(lcd, 0x70, 0x02);
+	ams369fg06_spi_read_byte(lcd, 0x71, &revision);
+
+	if (code[0] == 0x27 && code[1] == 0x96) {
+		dev_info(lcd->dev, "ams369fg06 Driver revision: %d\n", revision);
+		return 0;
+	} else {
+		return -1;
+	}
+}
+
 static int ams369fg06_power_on(struct ams369fg06 *lcd)
 {
 	int ret = 0;
@@ -357,6 +377,12 @@ static int ams369fg06_power_on(struct ams369fg06 *lcd)
 		return -EINVAL;
 	} else {
 		lcd->reset(lcd->ld);
+	};
+
+	/* read device code and revision number */
+	ret = ams369fg06_check_hw(lcd);
+	if (ret) {
+		dev_dbg(lcd->dev, "failed to read hw data.\n");
 	};
 
 	ret = ams369fg06_ldi_init(lcd);
