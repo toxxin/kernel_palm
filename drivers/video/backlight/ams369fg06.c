@@ -426,17 +426,6 @@ static int ams369fg06_power_off(struct ams369fg06 *lcd)
 }
 
 #if CONFIG_OF
-static int ams369fg06_reset(struct lcd_device *ld)
-{
-	struct ams369fg06 *lcd = lcd_get_data(ld);
-
-	mdelay(200);
-	gpio_set_value(lcd->resetpin, 0);
-	mdelay(5);
-	gpio_set_value(lcd->resetpin, 1);
-	mdelay(500);
-	return 0;
-};
 #endif
 
 static int ams369fg06_power(struct ams369fg06 *lcd, int power)
@@ -515,6 +504,18 @@ static const struct backlight_ops ams369fg06_backlight_ops = {
 
 
 #ifdef CONFIG_OF
+static int ams369fg06_reset(struct lcd_device *ld)
+{
+	struct ams369fg06 *lcd = lcd_get_data(ld);
+
+	mdelay(200);
+	gpio_set_value(lcd->resetpin, 0);
+	mdelay(5);
+	gpio_set_value(lcd->resetpin, 1);
+	mdelay(500);
+	return 0;
+};
+
 static int ams369fg06_bl_parse_dt(struct device *dev, struct ams369fg06 *lcd)
 {
 	int ret;
