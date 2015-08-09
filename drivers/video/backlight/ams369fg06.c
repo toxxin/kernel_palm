@@ -47,6 +47,7 @@ struct ams369fg06 {
 	int (*reset)(struct lcd_device *ld);
 	int (*power_on)(struct lcd_device *ld, int enable);
 	unsigned int			resetpin;
+	unsigned int			reset_pin_active_low;
 	unsigned int			reset_delay;
 	unsigned int			power_on_delay;
 	unsigned int			power_off_delay;
@@ -525,12 +526,13 @@ static int ams369fg06_reset(struct lcd_device *ld)
 static int ams369fg06_bl_parse_dt(struct device *dev, struct ams369fg06 *lcd)
 {
 	int ret;
+	enum of_gpio_flags flags;
 
 	lcd->lcd_pd = devm_kzalloc(dev, sizeof(struct lcd_platform_data), GFP_KERNEL);
 	if (!lcd->lcd_pd)
 		return -ENOMEM;
 
-	lcd->resetpin = of_get_named_gpio(dev->of_node, "gpio-rst", 0);
+	lcd->resetpin = of_get_named_gpio_flags(dev->of_node, "gpio-rst", 0, &flags);
 	if (!gpio_is_valid(lcd->resetpin)) {
 		dev_err(dev, "Missing dt property: gpios-reset\n");
 		return -EINVAL;
@@ -550,6 +552,8 @@ static int ams369fg06_bl_parse_dt(struct device *dev, struct ams369fg06 *lcd)
 			lcd->resetpin, ret);
 		return -EINVAL;
 	}
+
+	lcd->reset_pin_active_low = (flags & OF_GPIO_ACTIVE_LOW) ? 1 : 0;
 
 //	lcd->reset = &ams369fg06_reset;
 //	lcd->power_on = NULL;
