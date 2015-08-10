@@ -501,6 +501,7 @@
 			0x15a (PIN_INPUT_PULLUP | MUX_MODE4) /* mcbsp4_fsx.gpio_155 */
 			0x140 (PIN_INPUT_PULLUP | MUX_MODE4) /* mcbsp3_clkx.gpio_142 */
 
+			/*0x84 (PIN_OUTPUT_PULLUP | MUX_MODE4)*/			/* gpmc_ncs3.gpio_54 */
 			0x84 (PIN_OUTPUT | MUX_MODE4)			/* gpmc_ncs3.gpio_54 */
 			0x86 (PIN_INPUT_PULLUP | MUX_MODE4)		/* gpmc_ncs4.gpio_55 */
 			0x88 (PIN_INPUT | MUX_MODE4)			/* gpmc_ncs5.gpio_56 */
