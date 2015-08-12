@@ -48,9 +48,6 @@ struct ams369fg06 {
 	int (*power_on)(struct lcd_device *ld, int enable);
 	unsigned int			resetpin;
 	unsigned int			reset_pin_active_low;
-	unsigned int			reset_delay;
-	unsigned int			power_on_delay;
-	unsigned int			power_off_delay;
 };
 
 static const unsigned short seq_display_on[] = {
@@ -554,9 +551,6 @@ static int ams369fg06_bl_parse_dt(struct device *dev, struct ams369fg06 *lcd)
 	}
 
 	lcd->reset_pin_active_low = (flags & OF_GPIO_ACTIVE_LOW) ? 1 : 0;
-
-//	lcd->reset = &ams369fg06_reset;
-//	lcd->power_on = NULL;
 
 	lcd->lcd_pd->reset = &ams369fg06_reset;
 	lcd->lcd_pd->power_on = NULL;
