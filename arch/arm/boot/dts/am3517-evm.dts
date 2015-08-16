@@ -113,6 +113,13 @@
 			0x19e (PIN_OUTPUT_PULLUP | MUX_MODE0)	/* mcspi1_cs0.mcspi1_cs0 */
 		>;
 	};
+
+	can_pins: pinmux_can_pins {
+		pinctrl-sigle,pins = <
+			0x1e4 (PIN_INPUT_PULLUP | MUX_MODE0)			/* hecc1_txd */
+			0x1e6 (PIN_INPUT_PULLUP | MUX_MODE0)			/* hecc1_rxd */
+		>;
+	};
 };
 
 &davinci_emac {
