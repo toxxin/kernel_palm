@@ -122,6 +122,20 @@
 	};
 };
 
+&omap3_pmx_wkup {
+	pinctrl-names = "default";
+	pinctrl-0 = <
+		&ctrl_2_pins
+	>;
+
+	ctrl_2_pins: pinmux_ctrl_2_pins {
+		pinctrl-single,pins = <
+			/* nreswarm reset */
+			OMAP3_WKUP_IOPAD(0x2a08, PIN_INPUT_PULLUP | MUX_MODE4)
+		>;
+	};
+};
+
 &davinci_emac {
 	     status = "okay";
 };
