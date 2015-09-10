@@ -14,7 +14,7 @@
 	compatible = "ti,am3517-evm", "ti,am3517", "ti,omap3";
 
 	chosen {
-		bootargs = "console=ttyO2,115200n8 root=/dev/nfs rw nfsroot=192.168.0.78:/srv/nmv_wheezy ip=192.168.0.100:192.168.0.78:192.168.0.1:255.255.0.0:arm:eth0:off mem=256M";
+		bootargs = "console=ttyO2,115200n8 root=/dev/nfs rw nfsroot=192.168.0.78:/srv/evm_jessie ip=192.168.0.100:192.168.0.78:192.168.0.1:255.255.0.0:arm:eth0:off mem=256M";
 		/*bootargs = "console=ttyO2,115200 noinitrd root=/dev/mmcblk0p2 rootfstype=ext3 rw rootdelay=1";*/
 	};
 
@@ -155,6 +155,10 @@
 &i2c3 {
 	clock-frequency = <400000>;
 };
+/*
+&hecc {
+	status = "okay";
+};*/
 
 &mcspi1 {
 	pinctrl-names = "default";
