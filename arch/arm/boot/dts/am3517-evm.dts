@@ -155,10 +155,10 @@
 &i2c3 {
 	clock-frequency = <400000>;
 };
-/*
+
 &hecc {
 	status = "okay";
-};*/
+};
 
 &mcspi1 {
 	pinctrl-names = "default";
