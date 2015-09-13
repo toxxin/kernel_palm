@@ -13,6 +13,7 @@
 / {
 	aliases {
 		serial3 = &uart4;
+		can = &hecc;
 	};
 
 	ocp {
@@ -59,6 +60,17 @@
 			dma-names = "tx", "rx";
 			clock-frequency = <48000000>;
 		};
+
+		hecc: can@0x5c050000 {
+			compatible = "ti,omap3-hecc";
+			status = "disabled";
+			reg = <0x5c050000 0x4000>;
+			interrupts = <0>;
+			#address-cells = <1>;
+			#size-cells = <1>;
+			clocks = <&hecc_ck>;
+		};
+
 	};
 };
 
