@@ -65,12 +65,13 @@
 			compatible = "ti,omap3-hecc";
 			status = "disabled";
 			reg = <0x5c050000 0x4000>;
-			interrupts = <0>;
-			#address-cells = <1>;
-			#size-cells = <1>;
+			interrupts = <24>;
 			clocks = <&hecc_ck>;
+			scc-ram-offset = <0x3000>;
+			hecc-ram-offset = <0x3000>;
+			mbx-offset = <0x2000>;
+			int-line = <0>;
 		};
-
 	};
 };
 
