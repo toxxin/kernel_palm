@@ -67,10 +67,10 @@
 			reg = <0x5c050000 0x4000>;
 			interrupts = <24>;
 			clocks = <&hecc_ck>;
-			scc-ram-offset = <0x3000>;
-			hecc-ram-offset = <0x3000>;
-			mbx-offset = <0x2000>;
-			int-line = <0>;
+			ti,scc-ram-offset = <0x3000>;
+			ti,hecc-ram-offset = <0x3000>;
+			ti,mbx-offset = <0x2000>;
+			ti,int-line = <0>;
 		};
 	};
 };

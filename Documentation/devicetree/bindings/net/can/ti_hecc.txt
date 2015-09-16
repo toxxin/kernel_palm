@@ -8,12 +8,12 @@ Required properties:
 - reg: Offset and length of the register set for the device
 - interrupts: interrupt mapping for the hecc interrupts sources:
 - clocks: Clock phandles (see clock bindings for details)
-- scc-ram-offset: offset to scc module ram
-- hecc-ram-offset: offset to hecc module ram
-- mbx-offset: offset to mailbox module ram
+- ti,scc-ram-offset: offset to scc module ram
+- ti,hecc-ram-offset: offset to hecc module ram
+- ti,mbx-offset: offset to mailbox ram
 
 Optional properties:
-- int-line: interrupt line
+- ti,int-line: interrupt line
 
 Example:
 
@@ -24,8 +24,8 @@ For am3517evm board:
 		reg = <0x5c050000 0x4000>;
 		interrupts = <24>;
 		clocks = <&hecc_ck>;
-		scc-ram-offset = <0x3000>;
-		hecc-ram-offset = <0x3000>;
-		mbx-offset = <0x2000>;
-		int-line = <0>;
+		ti,scc-ram-offset = <0x3000>;
+		ti,hecc-ram-offset = <0x3000>;
+		ti,mbx-offset = <0x2000>;
+		ti,int-line = <0>;
 	};
