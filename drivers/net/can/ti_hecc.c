@@ -46,6 +46,8 @@
 #include <linux/platform_device.h>
 #include <linux/clk.h>
 #include <linux/io.h>
+#include <linux/of.h>
+#include <linux/of_device.h>
 
 #include <linux/can/dev.h>
 #include <linux/can/error.h>
@@ -874,19 +876,58 @@ static const struct net_device_ops ti_hecc_netdev_ops = {
 	.ndo_change_mtu		= can_change_mtu,
 };
 
+#if defined(CONFIG_OF)
+static const struct of_device_id ti_hecc_dt_ids[] = {
+	{
+		.compatible = "ti,omap3-hecc",
+	},
+	{ }
+};
+MODULE_DEVICE_TABLE(of, ti_hecc_dt_ids);
+#endif
+
+static int hecc_parse_dt(struct device *dev, struct ti_hecc_platform_data *pdata)
+{
+	if (of_property_read_u32(dev->of_node, "scc-ram-offset", &pdata->scc_ram_offset)) {
+		dev_err(dev, "Missing scc-ram-offset property in the DT.\n");
+		return -EINVAL;
+	}
+
+	if (of_property_read_u32(dev->of_node, "hecc-ram-offset", &pdata->hecc_ram_offset)) {
+		dev_err(dev, "Missing hecc-ram-offset property in the DT.\n");
+		return -EINVAL;
+	}
+	if (of_property_read_u32(dev->of_node, "mbx-offset", &pdata->mbx_offset)) {
+		dev_err(dev, "Missing mbx-offset property in the DT.\n");
+		return -EINVAL;
+	}
+	if (of_property_read_u32(dev->of_node, "int-line", &pdata->int_line)) {
+		pdata->int_line = 1;
+	}
+
+	return 0;
+}
+
 static int ti_hecc_probe(struct platform_device *pdev)
 {
 	struct net_device *ndev = (struct net_device *)0;
 	struct ti_hecc_priv *priv;
-	struct ti_hecc_platform_data *pdata;
+	struct ti_hecc_platform_data *pdata = dev_get_platdata(&pdev->dev);
+	struct device_node *np = pdev->dev.of_node;
 	struct resource *mem, *irq;
 	void __iomem *addr;
 	int err = -ENODEV;
 
-	pdata = dev_get_platdata(&pdev->dev);
-	if (!pdata) {
-		dev_err(&pdev->dev, "No platform data\n");
-		goto probe_exit;
+	if (!pdata && np) {
+		pdata = devm_kzalloc(&pdev->dev, sizeof(struct ti_hecc_platform_data), GFP_KERNEL);
+		if (!pdata)
+			return -ENOMEM;
+
+		if (hecc_parse_dt(&pdev->dev, pdata))
+			return -EINVAL;
+	} else if (!pdata) {
+		dev_err(&pdev->dev, "No platform data and device tree node\n");
+		return -EINVAL;
 	}
 
 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
@@ -939,7 +980,7 @@ static int ti_hecc_probe(struct platform_device *pdev)
 	SET_NETDEV_DEV(ndev, &pdev->dev);
 	ndev->netdev_ops = &ti_hecc_netdev_ops;
 
-	priv->clk = clk_get(&pdev->dev, "hecc_ck");
+	priv->clk = devm_clk_get(&pdev->dev, NULL);
 	if (IS_ERR(priv->clk)) {
 		dev_err(&pdev->dev, "No clock available\n");
 		err = PTR_ERR(priv->clk);
@@ -950,7 +991,8 @@ static int ti_hecc_probe(struct platform_device *pdev)
 	netif_napi_add(ndev, &priv->napi, ti_hecc_rx_poll,
 		HECC_DEF_NAPI_WEIGHT);
 
-	clk_enable(priv->clk);
+	clk_prepare_enable(priv->clk);
+
 	err = register_candev(ndev);
 	if (err) {
 		dev_err(&pdev->dev, "register_candev() failed\n");
@@ -965,7 +1007,8 @@ static int ti_hecc_probe(struct platform_device *pdev)
 	return 0;
 
 probe_exit_clk:
-	clk_put(priv->clk);
+	clk_disable_unprepare(priv->clk);
+	priv->clk = NULL;
 probe_exit_candev:
 	free_candev(ndev);
 probe_exit_iounmap:
@@ -983,8 +1026,8 @@ static int ti_hecc_remove(struct platform_device *pdev)
 	struct ti_hecc_priv *priv = netdev_priv(ndev);
 
 	unregister_candev(ndev);
-	clk_disable(priv->clk);
-	clk_put(priv->clk);
+	clk_disable_unprepare(priv->clk);
+	priv->clk = NULL;
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	iounmap(priv->base);
 	release_mem_region(res->start, resource_size(res));
@@ -1008,7 +1051,7 @@ static int ti_hecc_suspend(struct platform_device *pdev, pm_message_t state)
 	hecc_set_bit(priv, HECC_CANMC, HECC_CANMC_PDR);
 	priv->can.state = CAN_STATE_SLEEPING;
 
-	clk_disable(priv->clk);
+	clk_disable_unprepare(priv->clk);
 
 	return 0;
 }
@@ -1018,7 +1061,7 @@ static int ti_hecc_resume(struct platform_device *pdev)
 	struct net_device *dev = platform_get_drvdata(pdev);
 	struct ti_hecc_priv *priv = netdev_priv(dev);
 
-	clk_enable(priv->clk);
+	clk_prepare_enable(priv->clk);
 
 	hecc_clear_bit(priv, HECC_CANMC, HECC_CANMC_PDR);
 	priv->can.state = CAN_STATE_ERROR_ACTIVE;
@@ -1039,7 +1082,7 @@ static int ti_hecc_resume(struct platform_device *pdev)
 static struct platform_driver ti_hecc_driver = {
 	.driver = {
 		.name    = DRV_NAME,
-		.owner   = THIS_MODULE,
+		.of_match_table = ti_hecc_dt_ids,
 	},
 	.probe = ti_hecc_probe,
 	.remove = ti_hecc_remove,
