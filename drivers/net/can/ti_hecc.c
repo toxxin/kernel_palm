@@ -886,26 +886,33 @@ static const struct of_device_id ti_hecc_dt_ids[] = {
 MODULE_DEVICE_TABLE(of, ti_hecc_dt_ids);
 #endif
 
-static int hecc_parse_dt(struct device *dev, struct ti_hecc_platform_data *pdata)
+static struct ti_hecc_platform_data *hecc_parse_dt(struct device *dev)
 {
-	if (of_property_read_u32(dev->of_node, "scc-ram-offset", &pdata->scc_ram_offset)) {
+	struct ti_hecc_platform_data *pdata;
+	struct device_node *np = dev->of_node;
+
+	pdata = devm_kzalloc(dev, sizeof(struct ti_hecc_platform_data), GFP_KERNEL);
+	if (!pdata)
+		return ERR_PTR(-ENOMEM);
+
+	if (of_property_read_u32(np, "ti,scc-ram-offset", &pdata->scc_ram_offset)) {
 		dev_err(dev, "Missing scc-ram-offset property in the DT.\n");
-		return -EINVAL;
+		return ERR_PTR(-EINVAL);
 	}
 
-	if (of_property_read_u32(dev->of_node, "hecc-ram-offset", &pdata->hecc_ram_offset)) {
+	if (of_property_read_u32(np, "ti,hecc-ram-offset", &pdata->hecc_ram_offset)) {
 		dev_err(dev, "Missing hecc-ram-offset property in the DT.\n");
-		return -EINVAL;
+		return ERR_PTR(-EINVAL);
 	}
-	if (of_property_read_u32(dev->of_node, "mbx-offset", &pdata->mbx_offset)) {
+	if (of_property_read_u32(np, "ti,mbx-offset", &pdata->mbx_offset)) {
 		dev_err(dev, "Missing mbx-offset property in the DT.\n");
-		return -EINVAL;
+		return ERR_PTR(-EINVAL);
 	}
-	if (of_property_read_u32(dev->of_node, "int-line", &pdata->int_line)) {
-		pdata->int_line = 1;
+	if (of_property_read_u32(dev->of_node, "ti,int-line", &pdata->int_line)) {
+		pdata->int_line = 0;
 	}
 
-	return 0;
+	return pdata;
 }
 
 static int ti_hecc_probe(struct platform_device *pdev)
@@ -919,14 +926,13 @@ static int ti_hecc_probe(struct platform_device *pdev)
 	int err = -ENODEV;
 
 	if (!pdata && np) {
-		pdata = devm_kzalloc(&pdev->dev, sizeof(struct ti_hecc_platform_data), GFP_KERNEL);
-		if (!pdata)
-			return -ENOMEM;
+		pdata = hecc_parse_dt(&pdev->dev);
+		if (IS_ERR(pdata))
+			return PTR_ERR(pdata);
+	}
 
-		if (hecc_parse_dt(&pdev->dev, pdata))
-			return -EINVAL;
-	} else if (!pdata) {
-		dev_err(&pdev->dev, "No platform data and device tree node\n");
+	if (!pdata) {
+		dev_err(&pdev->dev, "Platform data missing\n");
 		return -EINVAL;
 	}
 
