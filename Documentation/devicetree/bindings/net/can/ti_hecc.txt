@@ -4,10 +4,10 @@ This file provides information, what the device node
 for the hecc interface contains.
 
 Required properties:
-- compatible: "ti,omap3-hecc"
-- reg: Offset and length of the register set for the device
-- interrupts: interrupt mapping for the hecc interrupts sources:
-- clocks: Clock phandles (see clock bindings for details)
+- compatible: "ti,am35x-hecc"
+- reg: offset and length of the register set for the device
+- interrupts: interrupt mapping for the hecc interrupts sources
+- clocks: clock phandles (see clock bindings for details)
 - ti,scc-ram-offset: offset to scc module ram
 - ti,hecc-ram-offset: offset to hecc module ram
 - ti,mbx-offset: offset to mailbox ram
@@ -19,7 +19,7 @@ Example:
 
 For am3517evm board:
 	hecc: can@0x5c050000 {
-		compatible = "ti,omap3-hecc";
+		compatible = "ti,am35x-hecc";
 		status = "disabled";
 		reg = <0x5c050000 0x4000>;
 		interrupts = <24>;
