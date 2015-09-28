@@ -1,19 +1,13 @@
 ams369fg06(tl2796) bindings
 
 Required properties:
-  - compatible: "samsung,ams369fg06"
+  - compatible: "samsung,ams369fg06-backlight"
   - reg: SPI chip select address of device
   - gpio-rst: reset GPIO pin
 
-Optional properties:
-  - bl-name: Backlight device name (string)
-  - init-brt: Initial value of backlight brightness (u8)
-
 Example:
-
-	/* AMS369FG06 */
 	backlight@0 {
-		compatible = "samsung,ams369fg06";
+		compatible = "samsung,ams369fg06-backlight";
 		reg = <0>;
 		gpio-rst = <&gpio4 2 GPIO_ACTIVE_LOW>;
 		bl-name = "lcd-bl";

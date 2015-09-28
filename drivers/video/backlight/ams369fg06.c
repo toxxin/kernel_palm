@@ -47,7 +47,7 @@ struct ams369fg06 {
 	int (*reset)(struct lcd_device *ld);
 	int (*power_on)(struct lcd_device *ld, int enable);
 	unsigned int			resetpin;
-	unsigned int			reset_pin_active_low;
+	unsigned int			reset_active;
 };
 
 static const unsigned short seq_display_on[] = {
@@ -338,7 +338,7 @@ static int ams369fg06_power_is_on(int power)
 	return power <= FB_BLANK_NORMAL;
 }
 
-static int ams369fg06_check_hw(struct ams369fg06 *lcd)
+static int ams369fg06_get_revision(struct ams369fg06 *lcd)
 {
 	u8 code[2];
 	u8 revision;
@@ -350,12 +350,10 @@ static int ams369fg06_check_hw(struct ams369fg06 *lcd)
 	ams369fg06_spi_write_byte(lcd, 0x70, 0x02);
 	ams369fg06_spi_read_byte(lcd, 0x71, &revision);
 
-	if (code[0] == 0x27 && code[1] == 0x96) {
-		dev_info(lcd->dev, "ams369fg06 Driver revision: %d\n", revision);
-		return 0;
-	} else {
+	if (code[0] == 0x27 && code[1] == 0x96)
+		return revision;
+	else
 		return -1;
-	}
 }
 
 static int ams369fg06_power_on(struct ams369fg06 *lcd)
@@ -381,10 +379,12 @@ static int ams369fg06_power_on(struct ams369fg06 *lcd)
 	msleep(pd->reset_delay);
 
 	/* read device code and revision number */
-	ret = ams369fg06_check_hw(lcd);
-	if (ret) {
+	ret = ams369fg06_get_revision(lcd);
+	if (ret < 0) {
 		dev_dbg(lcd->dev, "failed to read hw data.\n");
-	};
+	} else {
+		dev_info(lcd->dev, "ams369fg06 Driver revision: %d\n", ret);
+	}
 
 	ret = ams369fg06_ldi_init(lcd);
 	if (ret) {
@@ -429,9 +429,6 @@ static int ams369fg06_power_off(struct ams369fg06 *lcd)
 	return 0;
 }
 
-#if CONFIG_OF
-#endif
-
 static int ams369fg06_power(struct ams369fg06 *lcd, int power)
 {
 	int ret = 0;
@@ -469,11 +466,6 @@ static int ams369fg06_set_power(struct lcd_device *ld, int power)
 	return ams369fg06_power(lcd, power);
 }
 
-static int ams369fg06_get_brightness(struct backlight_device *bd)
-{
-	return bd->props.brightness;
-}
-
 static int ams369fg06_set_brightness(struct backlight_device *bd)
 {
 	int ret = 0;
@@ -502,7 +494,6 @@ static struct lcd_ops ams369fg06_lcd_ops = {
 };
 
 static const struct backlight_ops ams369fg06_backlight_ops = {
-	.get_brightness = ams369fg06_get_brightness,
 	.update_status = ams369fg06_set_brightness,
 };
 
@@ -513,9 +504,9 @@ static int ams369fg06_reset(struct lcd_device *ld)
 	struct ams369fg06 *lcd = lcd_get_data(ld);
 
 	mdelay(200);
-	gpio_set_value(lcd->resetpin, 1);
+	gpio_set_value(lcd->resetpin, lcd->reset_active);
 	mdelay(5);
-	gpio_set_value(lcd->resetpin, 1);
+	gpio_set_value(lcd->resetpin, !lcd->reset_active);
 	mdelay(500);
 	return 0;
 };
@@ -525,11 +516,13 @@ static int ams369fg06_bl_parse_dt(struct device *dev, struct ams369fg06 *lcd)
 	int ret;
 	enum of_gpio_flags flags;
 
-	lcd->lcd_pd = devm_kzalloc(dev, sizeof(struct lcd_platform_data), GFP_KERNEL);
+	lcd->lcd_pd = devm_kzalloc(dev, sizeof(struct lcd_platform_data),
+			GFP_KERNEL);
 	if (!lcd->lcd_pd)
 		return -ENOMEM;
 
-	lcd->resetpin = of_get_named_gpio_flags(dev->of_node, "gpio-rst", 0, &flags);
+	lcd->resetpin = of_get_named_gpio_flags(dev->of_node,
+			"gpio-rst", 0, &flags);
 	if (!gpio_is_valid(lcd->resetpin)) {
 		dev_err(dev, "Missing dt property: gpios-reset\n");
 		return -EINVAL;
@@ -550,7 +543,7 @@ static int ams369fg06_bl_parse_dt(struct device *dev, struct ams369fg06 *lcd)
 		return -EINVAL;
 	}
 
-	lcd->reset_pin_active_low = (flags & OF_GPIO_ACTIVE_LOW) ? 1 : 0;
+	lcd->reset_active = (flags & OF_GPIO_ACTIVE_LOW) ? 0 : 1;
 
 	lcd->lcd_pd->reset = &ams369fg06_reset;
 	lcd->lcd_pd->power_on = NULL;
@@ -577,7 +570,6 @@ static int ams369fg06_probe(struct spi_device *spi)
 	struct lcd_device *ld = NULL;
 	struct backlight_device *bd = NULL;
 	struct backlight_properties props;
-	struct device_node *np = spi->dev.of_node;
 
 	lcd = devm_kzalloc(&spi->dev, sizeof(struct ams369fg06), GFP_KERNEL);
 	if (!lcd)
@@ -595,15 +587,11 @@ static int ams369fg06_probe(struct spi_device *spi)
 	lcd->spi = spi;
 	lcd->dev = &spi->dev;
 
-	if (spi->dev.platform_data) {
-		lcd->lcd_pd = dev_get_platdata(&spi->dev);
-	} else if (np) {
+	lcd->lcd_pd = dev_get_platdata(&spi->dev);
+	if (!lcd->lcd_pd) {
 		ret = ams369fg06_bl_parse_dt(&spi->dev, lcd);
 		if (ret < 0)
 			return -EINVAL;
-	} else {
-		dev_err(&spi->dev, "no platform data and device node.\n");
-		return -EINVAL;
 	}
 
 	ld = devm_lcd_device_register(&spi->dev, "ams369fg06", &spi->dev, lcd,
@@ -626,9 +614,6 @@ static int ams369fg06_probe(struct spi_device *spi)
 	bd->props.brightness = DEFAULT_BRIGHTNESS;
 	lcd->bd = bd;
 
-	lcd->power = FB_BLANK_POWERDOWN;
-	ams369fg06_power(lcd, FB_BLANK_UNBLANK);
-#if 0
 	if (!lcd->lcd_pd->lcd_enabled) {
 		/*
 		 * if lcd panel was off from bootloader then
@@ -641,7 +626,6 @@ static int ams369fg06_probe(struct spi_device *spi)
 	} else {
 		lcd->power = FB_BLANK_UNBLANK;
 	}
-#endif
 
 	spi_set_drvdata(spi, lcd);
 
