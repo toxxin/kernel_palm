@@ -503,11 +503,10 @@ static int ams369fg06_reset(struct lcd_device *ld)
 {
 	struct ams369fg06 *lcd = lcd_get_data(ld);
 
-	mdelay(200);
 	gpio_set_value(lcd->resetpin, lcd->reset_active);
-	mdelay(5);
+	udelay(10);
 	gpio_set_value(lcd->resetpin, !lcd->reset_active);
-	mdelay(500);
+	mdelay(1);
 	return 0;
 };
 
