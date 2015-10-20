@@ -1015,7 +1015,7 @@ static int ti_hecc_probe(struct platform_device *pdev)
 
 probe_exit_clk:
 	clk_disable_unprepare(priv->clk);
-	priv->clk = NULL;
+	clk_put(priv->clk);
 probe_exit_candev:
 	free_candev(ndev);
 probe_exit_iounmap:
@@ -1034,7 +1034,7 @@ static int ti_hecc_remove(struct platform_device *pdev)
 
 	unregister_candev(ndev);
 	clk_disable_unprepare(priv->clk);
-	priv->clk = NULL;
+	clk_put(priv->clk);
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	iounmap(priv->base);
 	release_mem_region(res->start, resource_size(res));
