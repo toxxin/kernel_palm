@@ -349,6 +349,10 @@
 			0x1c4 (PIN_INPUT | MUX_MODE4)			/* ccdc_data3.gpio_102 */
 			/* WL_IRQ */
 			0x08c (PIN_INPUT | MUX_MODE4)			/* gpmc_ncs7.gpio_58 */
+			/* GPS_RST */
+			0x15e (PIN_OUTPUT_PULLUP | MUX_MODE4	/* mcbsp1_fsr.gpio_157 */
+			/* GPS_ANTFLAG */
+			0x1e6 (PIN_INPUT_PULLUP | MUX_MODE4)	/* hecc1_rxd.gpio_131 */
 		>;
 	};
 
@@ -519,6 +523,8 @@
 		pinctrl-single,pins = <
 			/* BT_HOST_WAKEUP */
 			OMAP3430_CORE2_IOPAD(0x25f8, PIN_INPUT | MUX_MODE4) /* etk_d14.gpio_28 */
+			/* GPS_PPS */
+			OMAP3430_CORE2_IOPAD(0x25f2, PIN_INPUT | MUX_MODE4) /* etk_d11.gpio_25 */
 		>;
 	};
 
