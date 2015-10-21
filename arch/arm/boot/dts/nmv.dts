@@ -200,6 +200,12 @@
 		gpio = <&gpio6 19 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 	};
+
+	pps {
+		compatible = "pps-gpio";
+		gpios = <&gpio1 25 GPIO_ACTIVE_HIGH>; /* gps_pps - gpio_25 */
+		status = "okay";
+	};
 };
 
 &uart1 {
