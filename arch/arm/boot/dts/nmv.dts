@@ -197,7 +197,7 @@
 		regulator-name = "vusb";
 		regulator-min-microvolt = <5000000>;
 		regulator-max-microvolt = <5000000>;
-		gpio = <&gpio6 19 GPIO_ACTIVE_HIGH>;
+		gpio = <&gpio6 19 GPIO_ACTIVE_HIGH>;	/* gpio_179 */
 		enable-active-high;
 	};
 
