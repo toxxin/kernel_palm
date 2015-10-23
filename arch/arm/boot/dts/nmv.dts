@@ -242,9 +242,9 @@
 	bq27500: bq27500@55 {
 		compatible = "ti,bq27500";
 		reg = <0x55>;
-		ti,enable-gpio = <&gpio2 22 1>;		/* gpio_54 */
-		ti,bat-good = <&gpio2 24 1>;		/* gpio_56 */
-		ti,soc_int = <&gpio2 23 1>;			/* gpio_55 */
+		ti,enable-gpio = <&gpio2 22 GPIO_ACTIVE_LOW>;		/* gpio_54 */
+		ti,bat-good = <&gpio2 24 GPIO_ACTIVE_LOW>;			/* gpio_56 */
+		ti,soc_int = <&gpio2 23 GPIO_ACTIVE_LOW>;			/* gpio_55 */
 	};
 
 	lis331dlh: lis331dlh@18 {
