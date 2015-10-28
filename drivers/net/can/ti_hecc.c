@@ -880,7 +880,7 @@ static const struct net_device_ops ti_hecc_netdev_ops = {
 #if defined(CONFIG_OF)
 static const struct of_device_id ti_hecc_dt_ids[] = {
 	{
-		.compatible = "ti,am35x-hecc",
+		.compatible = "ti,am3505-hecc",
 	},
 	{ }
 };

@@ -62,7 +62,7 @@
 		};
 
 		hecc: can@0x5c050000 {
-			compatible = "ti,am35x-hecc";
+			compatible = "ti,am3505-hecc";
 			status = "disabled";
 			reg = <0x5c050000 0x4000>;
 			interrupts = <24>;

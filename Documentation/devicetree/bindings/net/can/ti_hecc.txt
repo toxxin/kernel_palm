@@ -4,7 +4,7 @@ This file provides information, what the device node
 for the hecc interface contains.
 
 Required properties:
-- compatible: "ti,am35x-hecc"
+- compatible: "ti,am3505-hecc"
 - reg: offset and length of the register set for the device
 - interrupts: interrupt mapping for the hecc interrupts sources
 - clocks: clock phandles (see clock bindings for details)
@@ -19,7 +19,7 @@ Example:
 
 For am3517evm board:
 	hecc: can@0x5c050000 {
-		compatible = "ti,am35x-hecc";
+		compatible = "ti,am3505-hecc";
 		status = "disabled";
 		reg = <0x5c050000 0x4000>;
 		interrupts = <24>;
