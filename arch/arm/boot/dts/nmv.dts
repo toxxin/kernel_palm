@@ -356,7 +356,7 @@
 			/* WL_IRQ */
 			0x08c (PIN_INPUT | MUX_MODE4)			/* gpmc_ncs7.gpio_58 */
 			/* GPS_RST */
-			0x15e (PIN_OUTPUT_PULLUP | MUX_MODE4	/* mcbsp1_fsr.gpio_157 */
+			0x15e (PIN_OUTPUT_PULLUP | MUX_MODE4)	/* mcbsp1_fsr.gpio_157 */
 			/* GPS_ANTFLAG */
 			0x1e6 (PIN_INPUT_PULLUP | MUX_MODE4)	/* hecc1_rxd.gpio_131 */
 		>;
